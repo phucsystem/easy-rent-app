@@ -1,14 +1,14 @@
 # Easy Rent - Project Roadmap
 
 **Last Updated**: 2025-12-26
-**Version**: 0.1.0
-**Status**: Phase 1 Complete
+**Version**: 0.2.0
+**Status**: Phase 2 In Progress (70%)
 
 ---
 
 ## Project Overview
 
-Easy Rent is a web-based rental contract management system for landlords and property managers in Vietnam. The application enables digital contract creation, tenant management, and electronic signatures.
+Easy Rent is a web-based rental contract management system for landlords and property managers in Vietnam. The application enables digital contract creation, tenant management, and dashboard analytics.
 
 **Business Value**: Streamline rental operations, reduce paperwork, ensure legal compliance with Vietnamese contract standards.
 
@@ -27,6 +27,7 @@ Easy Rent is a web-based rental contract management system for landlords and pro
 | i18n | next-intl | Latest | Vietnamese/English support |
 | State | TanStack Query | Latest | Server state management |
 | Forms | react-hook-form + Zod | Latest | Form handling & validation |
+| Markdown | react-markdown | 10.1.0 | Contract template rendering |
 | Language | TypeScript | 5.7+ | Type safety |
 
 ---
@@ -59,51 +60,70 @@ Easy Rent is a web-based rental contract management system for landlords and pro
 |--------|--------|
 | TypeScript Compilation | ✅ Passing |
 | Build Status | ✅ Passing (1.2s) |
-| Linting | ⚠️ 2 warnings (non-blocking) |
+| Linting | ✅ Passing |
 | Security | ✅ No hardcoded secrets |
 | Type Safety | ✅ Strict mode |
 
-#### Open Items (Non-blocking)
-
-- Fix middleware linter warnings (unused `options` parameter)
-- Add environment variable validation utility
-- Create Supabase migration files for database schema
-
 ---
 
-### Phase 2: Authentication & User Management
+### Phase 2: Authentication & User Management 🚧
 
-**Status**: NOT STARTED
-**Target Start**: 2025-12-27
+**Status**: IN PROGRESS (70%)
+**Target Start**: 2025-12-26
 **Target Duration**: 3-4 days
-**Completion**: 0%
+**Completion**: 70%
 
-#### Objectives
+#### Completed Features
 
-Implement secure user authentication with Supabase Auth, protected routes, and session management.
+**Authentication Flow**:
+- [x] Email/password login page with split-screen design
+- [x] User registration with email verification
+- [x] Forgot password request page
+- [x] Reset password page
+- [x] Protected dashboard route with server-side auth check
+- [x] Custom useAuth hook for client-side operations
+- [x] Server actions for signOut
+- [x] Auth helpers in `/src/lib/supabase/auth.ts`
 
-#### Key Features
+**UI Components**:
+- [x] AuthSplitLayout with gradient left panel and form right panel
+- [x] Dashboard with collapsible dark sidebar
+- [x] DashboardHeader with user menu
+- [x] StatCard component for metrics
+- [x] MetricItem and ChartContainer components
 
-- Email/password authentication
-- User registration and login
-- Password reset flow
-- Email verification
-- Protected dashboard routes
-- Session persistence with cookies
-- Auth error handling
+**Design System**:
+- [x] Design tokens library (`/src/lib/design-tokens.ts`)
+- [x] Yellow/gold primary color (#F59E0B)
+- [x] Inter font family
+- [x] Consistent spacing, shadows, and border radius
+
+#### In Progress
+
+- [ ] Complete password reset flow with token validation
+- [ ] Email verification flow integration
+- [ ] Remember me functionality
+
+#### Pending
+
+- [ ] User profile management
+- [ ] Session timeout handling
+- [ ] Improved error messages
+- [ ] Loading skeletons
 
 #### Dependencies
 
 - Supabase project setup
-- Database migrations for `auth.users` (handled by Supabase)
+- Email templates configured in Supabase
 
 #### Success Criteria
 
-- User can register with email/password
-- User can login and access protected routes
-- Session persists across page refreshes
-- Unauthorized users redirected to login
-- Password reset email sent successfully
+- [x] User can register with email/password
+- [x] User can login and access protected routes
+- [x] Session persists across page refreshes
+- [x] Unauthorized users redirected to login
+- [ ] Password reset email sent and validated
+- [ ] Email verification working
 
 ---
 
@@ -126,25 +146,28 @@ Build complete CRUD functionality for tenant management with search, filtering, 
 - Delete with confirmation
 - Search and filter
 - Vietnamese phone number validation
+- Tenant cards with hover effects
 
 #### Database Schema
 
 ```sql
 CREATE TABLE tenants (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   full_name TEXT NOT NULL,
-  id_card TEXT UNIQUE NOT NULL,
   phone TEXT NOT NULL,
+  id_number TEXT UNIQUE,
   email TEXT,
   current_address TEXT,
   permanent_address TEXT,
-  created_at TIMESTAMP DEFAULT NOW(),
-  updated_at TIMESTAMP DEFAULT NOW()
+  date_of_birth DATE,
+  note TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 CREATE INDEX idx_tenants_user_id ON tenants(user_id);
-CREATE INDEX idx_tenants_id_card ON tenants(id_card);
+CREATE INDEX idx_tenants_full_name ON tenants USING gin(to_tsvector('english', full_name));
 ```
 
 #### Success Criteria
@@ -172,6 +195,7 @@ Create flexible contract template system with variable substitution and default 
 
 - Template list, create, edit, delete
 - Rich text editor for template content
+- Markdown rendering with react-markdown
 - Variable system ({{tenant_name}}, {{address}}, etc.)
 - Template preview
 - 3 default templates provided
@@ -181,14 +205,14 @@ Create flexible contract template system with variable substitution and default 
 
 ```sql
 CREATE TABLE contract_templates (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   name TEXT NOT NULL,
   content TEXT NOT NULL,
   variables JSONB DEFAULT '{}',
   is_default BOOLEAN DEFAULT FALSE,
-  created_at TIMESTAMP DEFAULT NOW(),
-  updated_at TIMESTAMP DEFAULT NOW()
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 CREATE INDEX idx_templates_user_id ON contract_templates(user_id);
@@ -229,9 +253,9 @@ Implement full contract lifecycle from creation to digital signing.
 
 ```sql
 CREATE TABLE contracts (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-  tenant_id UUID REFERENCES tenants(id) ON DELETE CASCADE,
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
   template_id UUID REFERENCES contract_templates(id) ON DELETE SET NULL,
   status TEXT DEFAULT 'draft' CHECK (status IN ('draft', 'pending', 'active', 'expired', 'terminated')),
   property_address TEXT NOT NULL,
@@ -242,8 +266,8 @@ CREATE TABLE contracts (
   terms JSONB DEFAULT '{}',
   landlord_signature_url TEXT,
   tenant_signature_url TEXT,
-  created_at TIMESTAMP DEFAULT NOW(),
-  updated_at TIMESTAMP DEFAULT NOW()
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 CREATE INDEX idx_contracts_user_id ON contracts(user_id);
@@ -368,7 +392,7 @@ Deploy to production and complete documentation.
 
 ```
 Phase 1: ████████████████████ 100% (COMPLETE)
-Phase 2: ░░░░░░░░░░░░░░░░░░░░   0% (3-4 days)
+Phase 2: ████████████░░░░░░░░  70% (IN PROGRESS)
 Phase 3: ░░░░░░░░░░░░░░░░░░░░   0% (4-5 days)
 Phase 4: ░░░░░░░░░░░░░░░░░░░░   0% (3-4 days)
 Phase 5: ░░░░░░░░░░░░░░░░░░░░   0% (5-6 days)
@@ -376,7 +400,7 @@ Phase 6: ░░░░░░░░░░░░░░░░░░░░   0% (3-4 
 Phase 7: ░░░░░░░░░░░░░░░░░░░░   0% (2-3 days)
 Phase 8: ░░░░░░░░░░░░░░░░░░░░   0% (2-3 days)
 
-Total Progress: ████░░░░░░░░░░░░ 12.5% (1/8 phases complete)
+Total Progress: █████░░░░░░░░░░░░ 22.5% (1.7/8 phases)
 Estimated Time to MVP: 3-4 weeks
 ```
 
@@ -387,7 +411,7 @@ Estimated Time to MVP: 3-4 weeks
 | Milestone | Target Date | Status | Notes |
 |-----------|-------------|--------|-------|
 | M1: Project Foundation | 2025-12-26 | ✅ Complete | All setup tasks done |
-| M2: Authentication Flow | TBD | ⏳ Pending | Phase 2 completion |
+| M2: Authentication Flow | 2025-12-27 | 🚧 In Progress | 70% complete |
 | M3: First Tenant Created | TBD | ⏳ Pending | Phase 3 completion |
 | M4: Template System Live | TBD | ⏳ Pending | Phase 4 completion |
 | M5: First Contract Signed | TBD | ⏳ Pending | Phase 5 completion |
@@ -411,6 +435,28 @@ Estimated Time to MVP: 3-4 weeks
 
 ## Changelog
 
+### Version 0.2.0 (2025-12-26)
+
+#### Added
+- Authentication flow (login, register, forgot password, reset password)
+- AuthSplitLayout component with gradient design
+- Dashboard with collapsible dark sidebar
+- DashboardHeader, StatCard, MetricItem, ChartContainer components
+- useAuth hook for client-side auth
+- Server actions for signOut
+- Design tokens library
+
+#### Completed
+- Phase 1: Project Setup & Foundation (100%)
+- Phase 2: Authentication & Dashboard (70%)
+
+#### Known Issues
+- Password reset flow needs token validation
+- Email verification not fully integrated
+- Missing loading skeletons
+
+---
+
 ### Version 0.1.0 (2025-12-26)
 
 #### Added
@@ -423,26 +469,16 @@ Estimated Time to MVP: 3-4 weeks
 - shadcn/ui component library
 - Project structure and documentation
 
-#### Completed
-- Phase 1: Project Setup & Foundation (100%)
-- Build pipeline verification
-- Security audit (no critical issues)
-
-#### Known Issues
-- 2 linter warnings (non-blocking)
-- Missing environment variable validation
-- Empty database migrations directory
-
 ---
 
 ## Next Steps
 
 **Immediate Actions (This Week)**
 
-1. Set up Supabase project
-2. Create database migrations (tenants, contract_templates, contracts)
-3. Implement Phase 2: Authentication flow
-4. Fix Phase 1 linter warnings
+1. Complete Phase 2 authentication flow
+2. Fix password reset token validation
+3. Add email verification
+4. Add remember me functionality
 
 **Upcoming (Next 2 Weeks)**
 
@@ -462,11 +498,11 @@ Estimated Time to MVP: 3-4 weeks
 ## Resources
 
 - **Repository**: /Users/phuc/Code/web/easy-rent-app
-- **Plans**: /Users/phuc/Code/web/easy-rent-app/plans/251226-easy-rent-mvp/
+- **Plans**: /Users/phuc/Code/web/easy-rent-app/plans/
 - **Reports**: /Users/phuc/Code/web/easy-rent-app/plans/reports/
 - **Documentation**: /Users/phuc/Code/web/easy-rent-app/docs/
 
 ---
 
-**Maintained By**: Project Manager Agent
+**Maintained By**: Documentation Manager Agent
 **Update Frequency**: After each phase completion or major milestone

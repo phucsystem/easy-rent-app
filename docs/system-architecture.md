@@ -1,8 +1,8 @@
 # System Architecture
 
 **Last Updated:** 2025-12-26
-**Version:** 0.1.0
-**Status:** Phase 1 Complete
+**Version:** 0.2.0
+**Status:** Phase 2 In Progress
 
 ## Table of Contents
 - [Architecture Overview](#architecture-overview)
@@ -102,55 +102,67 @@ Easy Rent is a **modern web application** built with a **serverless architecture
 
 ## Frontend Architecture
 
-### App Router Structure
+### App Router Structure (Current)
 
 ```
 src/app/
-├── [locale]/              # i18n dynamic route
-│   ├── (auth)/           # Auth route group
+├── [locale]/                    # i18n dynamic route
+│   ├── auth/                    # Authentication pages
 │   │   ├── login/
-│   │   └── layout.tsx
-│   ├── (dashboard)/      # Dashboard route group
-│   │   ├── dashboard/
-│   │   ├── tenants/
-│   │   ├── templates/
-│   │   ├── contracts/
-│   │   └── layout.tsx
-│   └── layout.tsx        # Root layout for locale
-├── api/                  # API routes (if needed)
-│   └── webhooks/
-├── globals.css
-├── layout.tsx            # Root layout
-└── page.tsx              # Landing page
+│   │   │   └── page.tsx        # Login page
+│   │   ├── register/
+│   │   │   └── page.tsx        # Registration page
+│   │   ├── forgot-password/
+│   │   │   └── page.tsx        # Password reset
+│   │   └── reset-password/
+│   │       └── page.tsx        # Set new password
+│   ├── dashboard/               # Dashboard pages
+│   │   ├── page.tsx            # Dashboard (protected)
+│   │   └── dashboard-client.tsx
+│   ├── layout.tsx              # Locale layout
+│   └── page.tsx                # Locale redirect
+├── globals.css                 # Global styles
+├── layout.tsx                  # Root layout
+└── page.tsx                    # Root redirect
 ```
 
 ### Component Architecture
 
-#### Component Hierarchy
+#### Component Hierarchy (Current)
 
 ```
-Layout Components (Server)
-├── RootLayout
-├── LocaleLayout
-└── DashboardLayout
+Layout Components
+├── RootLayout (Server)
+├── LocaleLayout (Server)
+└── DashboardLayout (Client)
 
-Feature Components
-├── TenantList (Server)
-│   └── TenantCard (Client)
-├── TenantForm (Client)
-├── ContractList (Server)
-│   └── ContractCard (Client)
-└── TemplateList (Server)
-    └── TemplateEditor (Client)
+Authentication Components (Client)
+└── AuthSplitLayout
+    ├── LoginPage
+    ├── RegisterPage
+    ├── ForgotPasswordPage
+    └── ResetPasswordPage
+
+Dashboard Components (Client)
+├── DashboardLayout
+│   ├── DashboardSidebar
+│   ├── DashboardHeader
+│   └── main content
+├── StatCard
+├── MetricItem
+└── ChartContainer
 
 UI Components (shadcn/ui)
 ├── Button
 ├── Card
 ├── Dialog
+├── DropdownMenu
 ├── Form
 ├── Input
+├── Label
 ├── Select
-└── Table
+├── Table
+└── Textarea
 ```
 
 #### Component Types
@@ -321,15 +333,50 @@ EXECUTE FUNCTION update_updated_at();
 
 ## Authentication & Authorization
 
-### Authentication Flow
+### Authentication Flow (Implemented)
 
 ```
-1. User visits /login
-2. Enters credentials
-3. Supabase Auth validates
-4. Session created
-5. Middleware refreshes session
-6. User redirected to dashboard
+1. User visits /login or /register
+2. Enters credentials in AuthSplitLayout
+3. useAuth hook calls signIn/signUp
+4. Supabase Auth validates
+5. Session created and stored
+6. User redirected to /dashboard
+7. Server-side auth check in DashboardPage
+8. If not authenticated, redirect to /login
+```
+
+### Implemented Auth Features
+
+**Client-Side** (`src/hooks/use-auth.tsx`):
+- `signIn(email, password)`: Sign in with credentials
+- `signUp(email, password)`: Register new user
+- `signOut()`: Sign out current user
+
+**Server-Side** (`src/lib/actions/auth.ts`):
+- `signOutAction(locale)`: Server action for sign out
+
+**Auth Helpers** (`src/lib/supabase/auth.ts`):
+- `signIn(email, password)`: Sign in helper
+- `signUp(email, password)`: Sign up helper
+- `resetPassword(email)`: Password reset helper
+- `signOut()`: Sign out helper
+
+### Protected Routes
+
+**Dashboard Page** (`src/app/[locale]/dashboard/page.tsx`):
+```typescript
+export default async function DashboardPage({ params }) {
+  const { locale } = await params;
+  const supabase = await createServerClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user || !user.email) {
+    redirect(`/${locale}/auth/login`);
+  }
+
+  return <DashboardClient locale={locale} userEmail={user.email} />;
+}
 ```
 
 ### Supabase Auth Integration

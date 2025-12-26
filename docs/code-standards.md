@@ -1,7 +1,7 @@
 # Code Standards & Development Guidelines
 
 **Last Updated:** 2025-12-26
-**Version:** 0.1.0
+**Version:** 0.2.0
 **Status:** Active
 
 ## Table of Contents
@@ -135,8 +135,25 @@ export function Button(props: any) {
 - **Extract complex logic** into custom hooks
 - **Follow rules of hooks** (no conditionals, loops)
 
+**Implemented Hooks**:
+
+**useAuth** (`src/hooks/use-auth.tsx`):
 ```typescript
-// Good
+export function useAuth() {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const signIn = async (email: string, password: string) => { /* ... */ };
+  const signUp = async (email: string, password: string) => { /* ... */ };
+  const signOut = async () => { /* ... */ };
+
+  return { user, loading, signIn, signUp, signOut };
+}
+```
+
+**Future Hooks**:
+```typescript
+// Good - Planned hooks
 function useTenant(id: string) {
   const [tenant, setTenant] = useState<Tenant | null>(null);
   const [loading, setLoading] = useState(true);
@@ -209,6 +226,22 @@ export function TenantList() {
 ```
 
 ## Component Standards
+
+### Custom Components
+
+**AuthSplitLayout** (`src/components/auth/auth-split-layout.tsx`):
+- Split-screen layout for authentication pages
+- Left panel: Gradient with geometric shapes
+- Right panel: Form container
+- Responsive: Stacks on mobile
+
+**Dashboard Components**:
+- **DashboardLayout**: Main dashboard wrapper
+- **DashboardSidebar**: Collapsible dark sidebar
+- **DashboardHeader**: Header with user menu
+- **StatCard**: Metric card with trend indicators
+- **MetricItem**: Simple metric display
+- **ChartContainer**: Chart wrapper
 
 ### shadcn/ui Components
 - **Use existing shadcn/ui components** when possible
@@ -346,7 +379,7 @@ src/
 ```
 
 ### Feature-Based Organization
-- **Group by feature** (tenants, contracts, templates)
+- **Group by feature** (auth, dashboard, tenants, contracts)
 - **Keep related files together**
 - **Use index files** for clean imports
 
@@ -359,6 +392,15 @@ export { TenantList } from './TenantList';
 // Usage
 import { TenantCard, TenantForm } from '@/components/tenants';
 ```
+
+**Current Feature Directories**:
+- `components/auth/` - Authentication components
+- `components/dashboard/` - Dashboard components
+- `components/ui/` - shadcn/ui components
+- `hooks/` - Custom React hooks
+- `lib/actions/` - Server actions
+- `lib/supabase/` - Supabase clients and helpers
+- `lib/` - Utilities and design tokens
 
 ## Import Standards
 

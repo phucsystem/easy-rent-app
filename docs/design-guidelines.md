@@ -77,53 +77,91 @@ Easy Rent follows a **clean, functional, and user-centric** design philosophy fo
 
 ### Color Palette
 
-Based on Tailwind CSS v4 with HSL color values:
+Based on `src/lib/design-tokens.ts` with hex color values:
 
-#### Light Mode
+#### Design Tokens Colors
+```typescript
+export const colors = {
+  // Primary - Yellow/Gold accent
+  primary: {
+    main: '#F59E0B',      // Amber-500
+    light: '#FBBF24',     // Amber-400
+    dark: '#F08C00',      // Amber-600
+    contrastText: '#212121',
+  },
+
+  // Backgrounds
+  background: {
+    default: '#F8F8F8',   // Light gray background
+    paper: '#FFFFFF',     // White card background
+    sidebar: '#212121',   // Dark sidebar
+  },
+
+  // Text
+  text: {
+    primary: '#333333',   // Primary text
+    secondary: '#666666', // Secondary text
+    disabled: '#CCCCCC',  // Disabled text
+    hint: '#999999',      // Hint text
+  },
+
+  // Status
+  success: '#4CAF50',
+  warning: '#FF9800',
+  error: '#F44336',
+  info: '#2196F3',
+
+  // Dividers
+  divider: '#E0E0E0',
+  border: '#E0E0E0',
+};
+```
+
+#### Tailwind CSS Integration
 ```css
 :root {
-  --primary: 245 158 11;          /* Amber-500 */
-  --background: 250 250 250;      /* Gray-50 */
-  --foreground: 15 15 15;         /* Gray-950 */
-  --card: 255 255 255;            /* White */
-  --card-foreground: 15 15 15;    /* Gray-950 */
-  --popover: 255 255 255;         /* White */
-  --popover-foreground: 15 15 15; /* Gray-950 */
-  --primary-foreground: 15 15 15; /* Gray-950 */
-  --secondary: 230 230 230;       /* Gray-200 */
-  --secondary-foreground: 15 15 15; /* Gray-950 */
-  --muted: 240 240 240;           /* Gray-300 */
-  --muted-foreground: 115 115 115; /* Gray-500 */
-  --accent: 245 158 11;           /* Amber-500 */
-  --accent-foreground: 15 15 15;  /* Gray-950 */
-  --destructive: 220 38 38;       /* Red-600 */
-  --border: 220 220 220;          /* Gray-300 */
-  --input: 220 220 220;           /* Gray-300 */
-  --ring: 245 158 11;             /* Amber-500 */
+  --primary: 245 158 11;          /* #F59E0B - Amber-500 */
+  --background: 248 248 248;      /* #F8F8F8 */
+  --foreground: 51 51 51;         /* #333333 */
+  --card: 255 255 255;            /* #FFFFFF */
+  --card-foreground: 51 51 51;    /* #333333 */
+  --popover: 255 255 255;         /* #FFFFFF */
+  --popover-foreground: 51 51 51; /* #333333 */
+  --primary-foreground: 33 33 33; /* #212121 */
+  --secondary: 230 230 230;       /* #E6E6E6 */
+  --secondary-foreground: 51 51 51; /* #333333 */
+  --muted: 240 240 240;           /* #F0F0F0 */
+  --muted-foreground: 102 102 102; /* #666666 */
+  --accent: 245 158 11;           /* #F59E0B */
+  --accent-foreground: 33 33 33;  /* #212121 */
+  --destructive: 244 67 54;       /* #F44336 */
+  --border: 224 224 224;          /* #E0E0E0 */
+  --input: 224 224 224;           /* #E0E0E0 */
+  --ring: 245 158 11;             /* #F59E0B */
 }
 ```
 
-#### Dark Mode
+#### Dark Sidebar Colors
 ```css
-.dark {
-  --background: 15 15 15;         /* Gray-950 */
-  --foreground: 250 250 250;      /* Gray-50 */
-  --card: 25 25 25;               /* Gray-900 */
-  --card-foreground: 250 250 250; /* Gray-50 */
-  --popover: 25 25 25;            /* Gray-900 */
-  --popover-foreground: 250 250 250; /* Gray-50 */
-  --primary: 245 158 11;          /* Amber-500 */
-  --primary-foreground: 15 15 15; /* Gray-950 */
-  --secondary: 45 45 45;          /* Gray-800 */
-  --secondary-foreground: 250 250 250; /* Gray-50 */
-  --muted: 45 45 45;              /* Gray-800 */
-  --muted-foreground: 180 180 180; /* Gray-400 */
-  --accent: 245 158 11;           /* Amber-500 */
-  --accent-foreground: 15 15 15;  /* Gray-950 */
-  --destructive: 240 100 100;     /* Red-500 */
-  --border: 45 45 45;             /* Gray-800 */
-  --input: 45 45 45;              /* Gray-800 */
-  --ring: 245 158 11;             /* Amber-500 */
+/* Dark sidebar uses fixed colors */
+.sidebar {
+  background: #212121;
+  border-color: #333333;
+}
+
+/* Sidebar navigation */
+.sidebar-nav-item {
+  color: #CCCCCC;
+}
+
+.sidebar-nav-item:hover {
+  background: #333333;
+  color: #FFFFFF;
+}
+
+.sidebar-nav-item.active {
+  background: #F59E0B;
+  color: #212121;
 }
 ```
 
@@ -160,34 +198,26 @@ Based on Tailwind CSS v4 with HSL color values:
 
 ### Font Families
 
-**Sans Serif (Primary)**: Geist Sans
+**Sans Serif (Primary)**: Inter
 ```css
-font-family: var(--font-geist-sans);
+font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 ```
 - Used for all body text
 - Modern, clean, highly readable
 - Excellent screen rendering
-
-**Mono (Secondary)**: Geist Mono
-```css
-font-family: var(--font-geist-mono);
-```
-- Used for code, numbers, data
-- Tabular figures for alignment
-- Technical information
+- Defined in `src/lib/design-tokens.ts`
 
 ### Type Scale
 
-| Scale | Size | Weight | Line Height | Usage |
-|-------|------|--------|-------------|-------|
-| xs | 0.75rem (12px) | 400 | 1rem | Captions, labels |
-| sm | 0.875rem (14px) | 400 | 1.25rem | Small text, helper text |
-| base | 1rem (16px) | 400 | 1.5rem | Body text, default |
-| lg | 1.125rem (18px) | 400 | 1.75rem | Large body, subheadings |
-| xl | 1.25rem (20px) | 600 | 1.75rem | Section headings |
-| 2xl | 1.5rem (24px) | 600 | 2rem | Page headings |
-| 3xl | 1.875rem (30px) | 700 | 2.25rem | Hero headings |
-| 4xl | 2.25rem (36px) | 700 | 2.5rem | Display headings |
+| Scale | Size | CSS | Usage |
+|-------|------|-----|-------|
+| xs | 12px | `0.75rem` | Captions, labels |
+| sm | 14px | `0.875rem` | Small text, helper text |
+| base | 16px | `1rem` | Body text, default |
+| lg | 18px | `1.125rem` | Large body, subheadings |
+| xl | 24px | `1.5rem` | Section headings |
+| 2xl | 28px | `1.75rem` | Page headings |
+| 3xl | 36px | `2.25rem` | Hero headings |
 
 ### Font Weights
 
@@ -219,20 +249,17 @@ font-family: var(--font-geist-mono);
 
 ### Spacing Scale
 
-Based on Tailwind spacing (0.25rem increments):
+Based on `src/lib/design-tokens.ts`:
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| 0 | 0px | No spacing |
-| 1 | 0.25rem (4px) | Tight spacing, icon padding |
-| 2 | 0.5rem (8px) | Compact spacing, related items |
-| 3 | 0.75rem (12px) | Default spacing, small gaps |
-| 4 | 1rem (16px) | Standard spacing, padding |
-| 5 | 1.25rem (20px) | Comfortable spacing |
-| 6 | 1.5rem (24px) | Section spacing |
-| 8 | 2rem (32px) | Large gaps, section separation |
-| 10 | 2.5rem (40px) | Extra large spacing |
-| 12 | 3rem (48px) | Major section breaks |
+| Token | px | rem | Usage |
+|-------|-----|-----|-------|
+| xs | 4px | `0.25rem` | Tight spacing, icon padding |
+| sm | 8px | `0.5rem` | Compact spacing, related items |
+| md | 16px | `1rem` | Standard spacing, padding |
+| lg | 24px | `1.5rem` | Section spacing |
+| xl | 32px | `2rem` | Large gaps, section separation |
+| 2xl | 48px | `3rem` | Major section breaks |
+| 3xl | 64px | `4rem` | Extra large spacing |
 
 ### Container Widths
 
@@ -285,6 +312,55 @@ Mobile:  4 columns, 16px gutters
 
 ## Component Design
 
+### Implemented Components
+
+#### AuthSplitLayout
+
+**Location**: `src/components/auth/auth-split-layout.tsx`
+
+**Features**:
+- Split-screen layout (50/50 on desktop)
+- Left panel: Gradient background with geometric shapes
+- Right panel: White background with form content
+- Responsive: Stacks vertically on mobile
+- Logo with "$" icon
+- Title, subtitle, and feature pills
+
+**Usage**:
+```typescript
+<AuthSplitLayout
+  title="Welcome Back"
+  subtitle="Sign in to access your dashboard"
+>
+  <YourForm />
+</AuthSplitLayout>
+```
+
+#### Dashboard Components
+
+**DashboardLayout** (`src/components/dashboard/dashboard-layout.tsx`):
+- Flex container with sidebar and main content
+- Background: `#F8F8F8`
+- Contains DashboardSidebar, DashboardHeader, and main content
+
+**DashboardSidebar** (`src/components/dashboard/dashboard-sidebar.tsx`):
+- Dark sidebar (`#212121` background)
+- Collapsible with toggle button
+- Navigation: Dashboard, Bookings, Properties, Customers, Contracts, Settings
+- Active state with primary color highlight
+- Hover effects with scale animations
+
+**DashboardHeader** (`src/components/dashboard/dashboard-header.tsx`):
+- User menu with sign out
+- Responsive design
+
+**StatCard** (`src/components/dashboard/stat-card.tsx`):
+- Metric display card
+- Title, value, trend (positive/negative)
+- Optional icon and badge
+- Hover elevation effect
+- Gradient trend indicators
+
 ### Button Styles
 
 **Variants** (shadcn/ui Button component):
@@ -302,13 +378,6 @@ Mobile:  4 columns, 16px gutters
 - `lg`: 40px height
 - `icon`: 36px (standard icons)
 - `icon-lg`: 40px (large icons)
-
-**Button Guidelines**:
-- Use `default` for primary CTAs
-- Use `outline` for secondary actions
-- Use `ghost` for icon-only buttons
-- Use `destructive` for delete/danger
-- Limit to 1-2 primary buttons per screen
 
 ### Card Styles
 

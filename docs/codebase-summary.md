@@ -1,56 +1,109 @@
 # Codebase Summary
 
 **Last Updated:** 2025-12-26
-**Version:** 0.1.0
-**Status:** Phase 1 Complete - Foundation Setup
+**Version:** 0.2.0
+**Status:** Phase 2 In Progress - Authentication & Dashboard
 
 ## Overview
 
 Easy Rent is a property rental management application built with Next.js 16, React 19, TypeScript, Supabase, and Tailwind CSS. This document provides a comprehensive summary of the codebase structure, key files, and implementation details.
+
+## Current Implementation Status
+
+### Completed Features
+
+**Phase 1: Foundation Setup** (100%)
+- Next.js 16.1.1 project with App Router and Turbopack
+- TypeScript strict mode enabled
+- Tailwind CSS v4 with custom yellow/gold theme (#F59E0B)
+- shadcn/ui component library integration
+- Supabase SSR client setup (server, middleware, browser)
+- next-intl i18n configured (vi/en)
+- Database type definitions
+
+**Phase 2: Authentication & Dashboard** (70%)
+- Authentication flow (login, register, forgot password, reset password)
+- Split-screen auth layout with gradient design
+- Dashboard with collapsible dark sidebar
+- Dashboard header with user menu
+- Stat cards component for metrics
+- Protected routes with server-side auth check
+- Custom auth hook (useAuth)
+- Server actions for signOut
+- Design tokens library
 
 ## Project Structure
 
 ```
 easy-rent-app/
 ├── src/
-│   ├── app/                          # Next.js App Router
-│   │   ├── globals.css               # Global styles and theme
-│   │   ├── layout.tsx                # Root layout
-│   │   └── page.tsx                  # Home page
+│   ├── app/                                # Next.js App Router
+│   │   ├── [locale]/                       # i18n dynamic route
+│   │   │   ├── auth/                       # Authentication pages
+│   │   │   │   ├── login/
+│   │   │   │   │   └── page.tsx            # Login with email/password
+│   │   │   │   ├── register/
+│   │   │   │   │   └── page.tsx            # Registration
+│   │   │   │   ├── forgot-password/
+│   │   │   │   │   └── page.tsx            # Password reset request
+│   │   │   │   └── reset-password/
+│   │   │   │       └── page.tsx            # Set new password
+│   │   │   ├── dashboard/
+│   │   │   │   ├── page.tsx                # Dashboard (protected)
+│   │   │   │   └── dashboard-client.tsx    # Client-side dashboard
+│   │   │   └── layout.tsx                  # Locale layout
+│   │   ├── globals.css                     # Global styles and theme
+│   │   ├── layout.tsx                      # Root layout
+│   │   └── page.tsx                        # Root redirect
 │   ├── components/
-│   │   └── ui/                       # shadcn/ui components
-│   │       ├── button.tsx            # Button component
-│   │       ├── card.tsx              # Card components
-│   │       ├── dialog.tsx            # Dialog/Modal
-│   │       ├── dropdown-menu.tsx     # Dropdown menu
-│   │       ├── form.tsx              # Form components
-│   │       ├── input.tsx             # Input field
-│   │       ├── label.tsx             # Form label
-│   │       ├── select.tsx            # Select dropdown
-│   │       ├── table.tsx             # Table components
-│   │       └── textarea.tsx          # Textarea field
+│   │   ├── auth/
+│   │   │   └── auth-split-layout.tsx       # Split-screen auth layout
+│   │   ├── dashboard/
+│   │   │   ├── dashboard-layout.tsx        # Dashboard layout wrapper
+│   │   │   ├── dashboard-header.tsx        # Header with user menu
+│   │   │   ├── dashboard-sidebar.tsx       # Collapsible dark sidebar
+│   │   │   ├── stat-card.tsx               # Metric stat card
+│   │   │   ├── metric-item.tsx             # Metric item component
+│   │   │   └── chart-container.tsx         # Chart wrapper
+│   │   └── ui/                             # shadcn/ui components
+│   │       ├── button.tsx                  # Button with variants
+│   │       ├── card.tsx                    # Card components
+│   │       ├── dialog.tsx                  # Dialog/Modal
+│   │       ├── dropdown-menu.tsx           # Dropdown menu
+│   │       ├── form.tsx                    # Form components
+│   │       ├── input.tsx                   # Input field
+│   │       ├── label.tsx                   # Form label
+│   │       ├── select.tsx                  # Select dropdown
+│   │       ├── table.tsx                   # Table components
+│   │       └── textarea.tsx                # Textarea field
+│   ├── hooks/
+│   │   └── use-auth.tsx                    # Authentication hook
 │   ├── lib/
-│   │   ├── supabase/                 # Supabase client utilities
-│   │   │   ├── client.ts             # Browser client
-│   │   │   ├── server.ts             # Server client
-│   │   │   └── middleware.ts         # Middleware helpers
-│   │   └── utils.ts                  # Utility functions
-│   ├── messages/                     # i18n translations
-│   │   ├── vi.json                   # Vietnamese
-│   │   └── en.json                   # English
+│   │   ├── actions/
+│   │   │   └── auth.ts                    # Server actions (signOut)
+│   │   ├── supabase/
+│   │   │   ├── auth.ts                    # Auth helpers
+│   │   │   ├── client.ts                  # Browser client
+│   │   │   ├── server.ts                  # Server client
+│   │   │   └── middleware.ts              # Middleware helpers
+│   │   ├── design-tokens.ts                # Design constants
+│   │   └── utils.ts                        # Utility functions (cn)
+│   ├── messages/                           # i18n translations
+│   │   ├── vi.json                         # Vietnamese
+│   │   └── en.json                         # English
 │   ├── types/
-│   │   └── database.ts               # Database type definitions
-│   ├── i18n.ts                       # i18n configuration
-│   └── middleware.ts                 # Next.js middleware
-├── docs/                             # Documentation
-├── plans/                            # Project plans
-├── .env.example                      # Environment template
-├── components.json                   # shadcn/ui config
-├── eslint.config.mjs                 # ESLint configuration
-├── next.config.ts                    # Next.js configuration
-├── package.json                      # Dependencies
-├── postcss.config.mjs                # PostCSS configuration
-└── tsconfig.json                     # TypeScript configuration
+│   │   └── database.ts                     # Database type definitions
+│   ├── i18n.ts                             # i18n configuration
+│   └── middleware.ts                       # Next.js middleware
+├── docs/                                   # Documentation
+├── plans/                                  # Project plans
+├── .env.example                            # Environment template
+├── components.json                         # shadcn/ui config
+├── eslint.config.mjs                       # ESLint configuration
+├── next.config.ts                          # Next.js configuration
+├── package.json                            # Dependencies
+├── postcss.config.mjs                      # PostCSS configuration
+└── tsconfig.json                           # TypeScript configuration
 ```
 
 ## Key Configuration Files
@@ -67,145 +120,239 @@ easy-rent-app/
 ```
 
 **Core Dependencies**:
-- `next@16.1.1` - React framework
+- `next@16.1.1` - React framework with App Router
 - `react@19.2.3` - UI library
 - `@supabase/ssr@^0.8.0` - Supabase SSR integration
 - `@supabase/supabase-js@^2.89.0` - Supabase client
-- `@tanstack/react-query@^5.90.12` - Server state
+- `@tanstack/react-query@^5.90.12` - Server state management
 - `next-intl@^4.6.1` - Internationalization
 - `react-hook-form@^7.69.0` - Form management
 - `zod@^4.2.1` - Schema validation
+- `react-markdown@^10.1.0` - Markdown rendering
 
 **UI Dependencies**:
 - `tailwindcss@^4` - Styling
+- `tw-animate-css@^1.4.0` - Tailwind animations
 - `@radix-ui/*` - Headless UI primitives
 - `lucide-react@^0.562.0` - Icons
 - `class-variance-authority@^0.7.1` - Component variants
 
-**Scripts**:
-```bash
-npm run dev      # Development server
-npm run build    # Production build
-npm run start    # Production server
-npm run lint     # Lint code
-```
+### Design Tokens (src/lib/design-tokens.ts)
 
-### tsconfig.json
+**Colors**:
+- Primary: `#F59E0B` (Amber-500)
+- Background: `#F8F8F8` (default), `#FFFFFF` (paper), `#212121` (sidebar)
+- Text: `#333333` (primary), `#666666` (secondary)
+- Status: Green, Orange, Red, Blue
 
-**Key Settings**:
-```json
-{
-  "compilerOptions": {
-    "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "strict": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "jsx": "react-jsx",
-    "paths": {
-      "@/*": ["./src/*"]
-    }
-  }
-}
-```
+**Typography**:
+- Font Family: Inter
+- Font Sizes: xs (12px) to 3xl (36px)
+- Font Weights: normal (400) to bold (700)
 
-### next.config.ts
+**Spacing**:
+- Scale: xs (4px) to 3xl (64px)
 
-```typescript
-import type { NextConfig } from 'next';
-import createNextIntlPlugin from 'next-intl/plugin';
+**Border Radius**:
+- Scale: sm (4px) to full (9999px)
 
-const withNextIntl = createNextIntlPlugin('./src/i18n.ts');
-
-const nextConfig: NextConfig = {
-  /* config options here */
-};
-
-export default withNextIntl(nextConfig);
-```
-
-### components.json (shadcn/ui)
-
-```json
-{
-  "style": "new-york",
-  "rsc": true,
-  "tsx": true,
-  "tailwind": {
-    "css": "src/app/globals.css",
-    "baseColor": "neutral",
-    "cssVariables": true
-  },
-  "iconLibrary": "lucide",
-  "aliases": {
-    "components": "@/components",
-    "utils": "@/lib/utils",
-    "ui": "@/components/ui",
-    "lib": "@/lib",
-    "hooks": "@/hooks"
-  }
-}
-```
+**Shadows**:
+- sm: `0 1px 2px rgba(0, 0, 0, 0.05)`
+- md: `0 2px 8px rgba(0, 0, 0, 0.08)`
+- lg: `0 4px 16px rgba(0, 0, 0, 0.1)`
+- xl: `0 8px 32px rgba(0, 0, 0, 0.12)`
 
 ## Source Code Analysis
 
 ### Application Layer (`/src/app`)
 
-#### globals.css
+#### Root Layout (layout.tsx)
 
-**Purpose**: Global styles and theme configuration using Tailwind CSS v4
-
-**Key Features**:
-- Tailwind CSS v4 with `@import "tailwindcss"`
-- Custom animations via `tw-animate-css`
-- Dark mode support via `@custom-variant dark`
-- CSS custom properties for theming
-- Design tokens (colors, spacing, radius)
-
-**Theme Colors**:
-- Primary: Amber-500 (`245 158 11`)
-- Supports light and dark modes
-- Full design system tokens (card, popover, sidebar, chart)
-
-#### layout.tsx
-
-**Purpose**: Root layout with font configuration
+**Purpose**: Root layout with font configuration and HTML structure
 
 ```typescript
-export const metadata: Metadata = {
-  title: "Create Next App",
-  description: "Generated by create next app",
-};
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {children}
-      </body>
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }
 ```
 
-**Note**: Needs to be updated for i18n and actual app metadata
+#### Locale Layout (`/[locale]/layout.tsx`)
 
-#### page.tsx
+**Purpose**: Locale-specific layout with authentication redirect
 
-**Purpose**: Home/landing page (currently Next.js default)
+**Features**:
+- Redirects authenticated users to dashboard
+- Redirects unauthenticated users to login
+- Passes locale to child components
 
-**Status**: Placeholder, needs to be replaced with actual landing page
+#### Root Page (page.tsx)
 
-### Supabase Integration (`/src/lib/supabase`)
+**Purpose**: Root redirect to default locale
 
-#### client.ts
+**Behavior**: Redirects to `/{locale}` (e.g., `/vi`)
 
-**Purpose**: Create Supabase browser client for client-side operations
+### Authentication Pages (`/src/app/[locale]/auth`)
+
+#### Login Page
+
+**Features**:
+- Email/password authentication
+- Split-screen layout with gradient left panel
+- Error handling with user-friendly messages
+- Loading states
+- Link to registration and forgot password
+
+**Components Used**:
+- AuthSplitLayout
+- Card, Input, Label, Button
+
+#### Register Page
+
+**Features**:
+- Email/password registration
+- Password confirmation validation
+- Minimum 6 character password
+- Success state with email verification message
+- Split-screen layout
+
+#### Forgot Password Page
+
+**Features**:
+- Password reset request via email
+- Success confirmation screen
+- Clean centered card layout
+
+#### Reset Password Page
+
+**Features**:
+- New password form
+- Password confirmation
+- Password strength validation
+
+### Dashboard (`/src/app/[locale]/dashboard`)
+
+#### Dashboard Page (Server Component)
+
+**Purpose**: Protected dashboard page with authentication check
 
 ```typescript
-import { createBrowserClient } from '@supabase/ssr';
-import { Database } from '@/types/database';
+export default async function DashboardPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const supabase = await createServerClient();
+  const { data: { user } } = await supabase.auth.getUser();
 
+  if (!user || !user.email) {
+    redirect(`/${locale}/auth/login`);
+  }
+
+  return <DashboardClient locale={locale} userEmail={user.email} />;
+}
+```
+
+**Features**:
+- Server-side authentication check
+- Redirects unauthenticated users
+- Passes user data to client component
+
+#### Dashboard Client (Client Component)
+
+**Purpose**: Client-side dashboard with interactive components
+
+**Features**:
+- DashboardLayout wrapper
+- Stat cards for metrics
+- Chart containers
+- Metric items
+
+### Components
+
+#### Auth Components
+
+**AuthSplitLayout**:
+- Left panel: Gradient background with geometric shapes, logo, title, subtitle, feature pills
+- Right panel: White background with form content
+- Responsive: Stacks vertically on mobile, side-by-side on desktop
+
+#### Dashboard Components
+
+**DashboardLayout**:
+- Flex container with sidebar and main content
+- Background color: `#F8F8F8`
+- Contains DashboardSidebar, DashboardHeader, and main content area
+
+**DashboardSidebar**:
+- Dark sidebar (`#212121` background)
+- Collapsible with toggle button
+- Navigation items: Dashboard, Bookings, Properties, Customers, Contracts, Settings
+- Active state highlighting with primary color
+- Hover effects with scale animations
+- Logo with "$" icon
+
+**DashboardHeader**:
+- Header with user menu
+- Sign out functionality
+- Responsive design
+
+**StatCard**:
+- Metric display card
+- Title, value, trend
+- Optional icon and badge
+- Hover elevation effect
+- Gradient trend indicators (green for positive, red for negative)
+
+**MetricItem**:
+- Simple metric display
+- Label and value
+- Used within stat cards
+
+**ChartContainer**:
+- Wrapper for charts
+- Title and description
+- Chart content area
+
+#### UI Components (shadcn/ui)
+
+All standard shadcn/ui components with custom styling:
+- Button: Primary (amber), secondary, outline, ghost, destructive, link
+- Card: Container, header, title, description, content, footer
+- Dialog: Modal with overlay
+- DropdownMenu: Radix-based dropdown
+- Form: React Hook Form integration
+- Input, Textarea, Label: Form controls
+- Select: Dropdown selection
+- Table: Data display with header, body, footer
+
+### Hooks
+
+#### useAuth
+
+**Purpose**: Custom authentication hook for client-side auth operations
+
+**Features**:
+- `signIn(email, password)`: Sign in with credentials
+- `signUp(email, password)`: Register new user
+- `signOut()`: Sign out current user
+- Uses Supabase browser client
+- Error handling with user-friendly messages
+
+### Libraries
+
+#### Supabase Integration (`/src/lib/supabase`)
+
+**client.ts**:
+```typescript
 export const createClient = () =>
   createBrowserClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -213,109 +360,44 @@ export const createClient = () =>
   );
 ```
 
-**Usage**: Client components, interactive features
-
-#### server.ts
-
-**Purpose**: Create Supabase server client for Server Components
-
+**server.ts**:
 ```typescript
-import { createServerClient as createSupabaseServerClient } from '@supabase/ssr';
-import { cookies } from 'next/headers';
-import { Database } from '@/types/database';
-
 export const createServerClient = async () => {
   const cookieStore = await cookies();
-
   return createSupabaseServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() { return cookieStore.getAll(); },
-        setAll(cookiesToSet) { /* ... */ },
-      },
-    }
+    { cookies: { ... } }
   );
 };
 ```
 
-**Usage**: Server Components, API routes, Server Actions
+**auth.ts**:
+- `signIn(email, password)`: Sign in helper
+- `signUp(email, password)`: Sign up helper
+- `resetPassword(email)`: Password reset helper
+- `signOut()`: Sign out helper
 
-#### middleware.ts
+#### Design Tokens (`/src/lib/design-tokens.ts`)
 
-**Purpose**: Supabase session refresh in Next.js middleware
-
-```typescript
-export async function updateSession(request: NextRequest) {
-  let response = NextResponse.next({ request: { headers: request.headers } });
-
-  const supabase = createServerClient<Database>(...);
-
-  return supabase;
-}
-```
-
-**Usage**: Session management, auth refresh
+Comprehensive design system constants:
+- Colors (primary, background, text, status, dividers)
+- Typography (font family, sizes, weights, line heights)
+- Spacing scale
+- Border radius
+- Shadows
+- Card styles
+- Transitions
+- Z-index layers
 
 ### Type Definitions (`/src/types`)
 
 #### database.ts
 
-**Purpose**: TypeScript types for Supabase database schema
-
-**Schema**:
-```typescript
-export interface Database {
-  public: {
-    Tables: {
-      tenants: {
-        Row: {
-          id: string;
-          user_id: string;
-          full_name: string;
-          phone: string;
-          id_number: string | null;
-          address: string | null;
-          date_of_birth: string | null;
-          note: string | null;
-          created_at: string;
-          updated_at: string;
-        };
-        Insert: Omit<Row, 'id' | 'created_at' | 'updated_at'>;
-        Update: Partial<Insert>;
-      };
-      contract_templates: {
-        Row: {
-          id: string;
-          user_id: string;
-          name: string;
-          content: string;
-          created_at: string;
-          updated_at: string;
-        };
-        Insert: Omit<Row, 'id' | 'created_at' | 'updated_at'>;
-        Update: Partial<Insert>;
-      };
-      contracts: {
-        Row: {
-          id: string;
-          user_id: string;
-          tenant_id: string;
-          template_id: string;
-          tenant_snapshot: Json;
-          template_snapshot: Json;
-          generated_content: string;
-          generated_at: string;
-          created_at: string;
-        };
-        Insert: Omit<Row, 'id' | 'created_at'>;
-        Update: Partial<Insert>;
-      };
-    };
-  };
-}
-```
+**Tables**:
+- `tenants`: Tenant information
+- `contract_templates`: Contract templates
+- `contracts`: Generated contracts with snapshots
 
 **Usage**: Type-safe database queries throughout the app
 
@@ -323,13 +405,10 @@ export interface Database {
 
 #### i18n.ts
 
-**Purpose**: next-intl configuration for Server Components
-
 ```typescript
 export default getRequestConfig(async ({ requestLocale }) => {
   let locale = await requestLocale;
   if (!locale) locale = 'vi';
-
   return {
     locale,
     messages: (await import(`./messages/${locale}.json`)).default,
@@ -337,44 +416,21 @@ export default getRequestConfig(async ({ requestLocale }) => {
 });
 ```
 
-#### vi.json (Vietnamese)
+**Supported Locales**:
+- Vietnamese (vi) - Default
+- English (en)
+
+#### Translation Structure
 
 ```json
 {
-  "common": {
-    "appName": "Easy Rent",
-    "save": "Lưu",
-    "cancel": "Hủy",
-    // ...
-  },
-  "nav": {
-    "dashboard": "Tổng quan",
-    "tenants": "Khách thuê",
-    // ...
-  },
-  "auth": {
-    "signIn": "Đăng nhập",
-    // ...
-  }
-}
-```
-
-#### en.json (English)
-
-```json
-{
-  "common": {
-    "appName": "Easy Rent",
-    "save": "Save",
-    "cancel": "Cancel",
-    // ...
-  }
+  "common": { "appName": "Easy Rent", "save": "Lưu" },
+  "nav": { "dashboard": "Tổng quan", "tenants": "Khách thuê" },
+  "auth": { "signIn": "Đăng nhập" }
 }
 ```
 
 ### Middleware (`/src/middleware.ts`)
-
-**Purpose**: Next.js middleware for i18n routing
 
 ```typescript
 import createMiddleware from 'next-intl/middleware';
@@ -394,72 +450,30 @@ export const config = {
 - Handles locale detection and routing
 - Redirects root to default locale
 
-### UI Components (`/src/components/ui`)
+## Routes
 
-#### button.tsx
+### Implemented Routes
 
-**Features**:
-- Class Variance Authority (CVA) for variants
-- Variants: default, destructive, outline, secondary, ghost, link
-- Sizes: default, sm, lg, icon, icon-sm, icon-lg
-- Support for `asChild` pattern (Radix Slot)
+| Route | Purpose | Protected | Component |
+|-------|---------|-----------|-----------|
+| `/` | Root redirect | No | Redirects to `/{locale}` |
+| `/{locale}` | Auth-based redirect | No | Redirects based on auth |
+| `/{locale}/auth/login` | Login page | No | LoginPage |
+| `/{locale}/auth/register` | Registration | No | RegisterPage |
+| `/{locale}/auth/forgot-password` | Password reset | No | ForgotPasswordPage |
+| `/{locale}/auth/reset-password` | Set new password | No | ResetPasswordPage |
+| `/{locale}/dashboard` | Dashboard | Yes | DashboardPage |
 
-#### card.tsx
+### Planned Routes
 
-**Components**:
-- Card: Container
-- CardHeader: Header section
-- CardTitle: Title
-- CardDescription: Description
-- CardContent: Content area
-- CardFooter: Footer section
-
-#### dialog.tsx
-
-**Features**:
-- Modal dialog using Radix UI
-- Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose
-
-#### form.tsx
-
-**Features**:
-- React Hook Form integration
-- Form, FormField, FormItem, FormLabel, FormControl, FormMessage
-- Designed for use with shadcn/ui components
-
-#### input.tsx, textarea.tsx, label.tsx, select.tsx
-
-**Features**:
-- Form input components
-- Consistent styling with design tokens
-- Focus and error states
-
-#### table.tsx
-
-**Components**:
-- Table, TableHeader, TableBody, TableFooter, TableRow, TableHead, TableCell
-- Consistent styling and borders
-
-#### dropdown-menu.tsx
-
-**Features**:
-- Dropdown menu using Radix UI
-- DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuCheckboxItem, DropdownMenuRadioItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuShortcut
-
-### Utilities (`/src/lib/utils.ts`)
-
-**Purpose**: Utility functions
-
-```typescript
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
-```
-
-**Usage**: Merge and deduplicate Tailwind classes
+| Route | Purpose | Priority |
+|-------|---------|----------|
+| `/{locale}/tenants` | Tenant management | High |
+| `/{locale}/contracts` | Contract management | High |
+| `/{locale}/templates` | Contract templates | High |
+| `/{locale}/properties` | Property management | Medium |
+| `/{locale}/bookings` | Booking management | Medium |
+| `/{locale}/settings` | User settings | Low |
 
 ## Environment Configuration
 
@@ -477,38 +491,13 @@ NEXT_PUBLIC_APP_URL=
 **Required Variables**:
 - `NEXT_PUBLIC_SUPABASE_URL`: Supabase project URL
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Supabase anonymous key
-- `NEXT_PUBLIC_APP_URL`: Application URL (e.g., http://localhost:3000)
-
-## Code Quality Tools
-
-### ESLint (eslint.config.mjs)
-
-```javascript
-import { defineConfig, globalIgnores } from "eslint/config";
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
-
-const eslintConfig = defineConfig([
-  ...nextVitals,
-  ...nextTs,
-  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts"]),
-]);
-```
-
-**Configuration**: Next.js recommended TypeScript rules
-
-### Prettier
-
-**Status**: Prettier installed but no config file (using defaults)
-
-**Recommendation**: Create `.prettierrc` for custom formatting rules
+- `NEXT_PUBLIC_APP_URL`: Application URL
 
 ## Database Schema
 
 ### Tables
 
 #### tenants
-
 | Column | Type | Nullable | Description |
 |--------|------|----------|-------------|
 | id | uuid | No | Primary key |
@@ -523,7 +512,6 @@ const eslintConfig = defineConfig([
 | updated_at | timestamp | No | Update timestamp |
 
 #### contract_templates
-
 | Column | Type | Nullable | Description |
 |--------|------|----------|-------------|
 | id | uuid | No | Primary key |
@@ -534,7 +522,6 @@ const eslintConfig = defineConfig([
 | updated_at | timestamp | No | Update timestamp |
 
 #### contracts
-
 | Column | Type | Nullable | Description |
 |--------|------|----------|-------------|
 | id | uuid | No | Primary key |
@@ -546,30 +533,6 @@ const eslintConfig = defineConfig([
 | generated_content | text | No | Generated contract |
 | generated_at | timestamp | No | Generation timestamp |
 | created_at | timestamp | No | Creation timestamp |
-
-## Current Implementation Status
-
-### Phase 1: Foundation (Complete)
-
-- [x] Next.js 16 project setup
-- [x] TypeScript configuration
-- [x] Tailwind CSS 4 setup
-- [x] shadcn/ui component installation
-- [x] Supabase client and server setup
-- [x] Database type definitions
-- [x] Internationalization setup (vi/en)
-- [x] Middleware for i18n and auth
-- [x] ESLint configuration
-- [x] Documentation structure
-
-### Next Steps (Phase 2)
-
-- [ ] Authentication flow implementation
-- [ ] Protected routes setup
-- [ ] Tenant CRUD operations
-- [ ] Contract template management
-- [ ] Contract generation system
-- [ ] Dashboard with analytics
 
 ## Development Workflow
 
@@ -598,12 +561,11 @@ const eslintConfig = defineConfig([
 
 ### Adding New Features
 
-1. **Create database types** in `src/types/database.ts`
-2. **Create Supabase queries** using typed client
-3. **Build UI components** using shadcn/ui
-4. **Implement forms** with React Hook Form + Zod
-5. **Add translations** to `src/messages/*.json`
-6. **Update documentation**
+1. Create route in `src/app/[locale]/`
+2. Create components in `src/components/`
+3. Add translations to `src/messages/*.json`
+4. Add database types to `src/types/database.ts`
+5. Update documentation
 
 ### Code Quality
 
@@ -615,24 +577,41 @@ const eslintConfig = defineConfig([
 
 | Dependency | Purpose | Why |
 |------------|---------|-----|
-| Next.js 16 | Framework | Latest App Router, Server Components |
+| Next.js 16 | Framework | Latest App Router, Server Components, Turbopack |
 | React 19 | UI library | Latest features, better performance |
 | Supabase | Backend | Auth, database, RLS, real-time |
-| TanStack Query | State management | Server state, caching, sync |
+| TanStack Query | State | Server state, caching, sync |
 | React Hook Form | Forms | Performance, DX, validation |
 | Zod | Validation | Type-safe schemas, TypeScript-first |
 | next-intl | i18n | Server Components support, simple |
 | shadcn/ui | Components | Customizable, accessible, modern |
 | Tailwind CSS 4 | Styling | Latest features, CSS variables |
+| react-markdown | Markdown | Contract template rendering |
 
 ## Known Limitations
 
-1. **No authentication UI** - Only Supabase client setup
-2. **No database migrations** - Schema defined in types only
-3. **No tests** - Testing framework not set up
-4. **No API routes** - Using Server Components instead
-5. **No E2E tests** - Playwright not configured
-6. **No CI/CD** - GitHub Actions not set up
+1. **No tenant CRUD** - Only authentication implemented
+2. **No contract management** - Templates and contracts not implemented
+3. **No property management** - Not implemented
+4. **No tests** - Testing framework not set up
+5. **No API routes** - Using Server Components instead
+6. **No E2E tests** - Playwright not configured
+7. **No CI/CD** - GitHub Actions not set up
+
+## Next Steps (Phase 2-3)
+
+**Immediate (Phase 2)**:
+- Complete password reset flow
+- Add email verification
+- Add remember me functionality
+- Improve error handling
+- Add loading skeletons
+
+**Short-term (Phase 3)**:
+- Tenant CRUD operations
+- Tenant list with search/filter
+- Tenant detail pages
+- Tenant form validation with Zod
 
 ## Related Documentation
 
@@ -644,6 +623,16 @@ const eslintConfig = defineConfig([
 - [Project Roadmap](./project-roadmap.md)
 
 ## Change Log
+
+### 2025-12-26 - Phase 2 In Progress
+- Implemented authentication flow (login, register, forgot password, reset password)
+- Created AuthSplitLayout with gradient design
+- Built dashboard with collapsible dark sidebar
+- Added StatCard, MetricItem, ChartContainer components
+- Implemented protected routes with server-side auth check
+- Created useAuth hook and auth server actions
+- Added design tokens library
+- Updated codebase summary with current implementation
 
 ### 2025-12-26 - Initial Documentation
 - Created codebase summary
