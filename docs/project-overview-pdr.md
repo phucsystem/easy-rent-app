@@ -1,8 +1,8 @@
 # Project Overview & Product Development Requirements (PDR)
 
 **Last Updated:** 2025-12-26
-**Version:** 0.3.0
-**Status:** Phase 3 Complete - Tenant Management Module
+**Version:** 0.4.0
+**Status:** Phase 4 In Progress - Contract Template Management
 
 ## Project Overview
 
@@ -90,22 +90,34 @@ To provide a simple, efficient, and localized solution for managing rental prope
 - Vietnamese phone number validation
 - Responsive design for mobile devices
 
-#### 2. Contract Templates (Priority: High)
+#### 2. Contract Templates (Priority: High) - PHASE 4
 **Requirements:**
-- Create and manage reusable contract templates
-- Use markdown for template content
-- Support variable substitution for:
-  - Tenant name
-  - Property address
-  - Rental amount
-  - Contract dates
-  - Custom fields
+- Create, read, update, and delete contract templates
+- Support variable substitution with {{variable}} syntax
+- 3 default Vietnamese templates included:
+  - Residential lease agreement (Hợp đồng thuê nhà dân dụng)
+  - Commercial property lease (Hợp đồng thuê kinh doanh)
+  - Short-term rental agreement (Hợp đồng thuê ngắn hạn)
+- Support 14+ standard template variables:
+  - Tenant info: full name, ID card, phone, email, address
+  - Landlord info: name, ID card, phone
+  - Property info: address
+  - Financial: monthly rent, deposit, payment date
+  - Dates: contract date, start date, end date
+- XSS-safe variable replacement with HTML entity escaping
+- RLS-protected template management (user-owned + defaults)
+- Mobile-responsive UI for template CRUD
+- Search and pagination for template lists
 
 **Acceptance Criteria:**
-- Create/edit/delete templates
-- Preview template with sample data
-- Markdown rendering support
-- Template versioning
+- [x] Full CRUD operations functional
+- [x] Variable substitution working with XSS protection
+- [x] 3 default Vietnamese templates seeded
+- [x] Template clone functionality
+- [x] Responsive design (mobile + desktop)
+- [x] RLS policies enforcing user ownership
+- [x] Search and filter capabilities
+- [x] Type-safe TypeScript implementation
 
 #### 3. Contract Generation (Priority: High)
 **Requirements:**
@@ -207,13 +219,27 @@ To provide a simple, efficient, and localized solution for managing rental prope
 ```typescript
 {
   id: string (uuid, primary key)
-  user_id: string (uuid, foreign key to auth.users)
+  user_id: string (uuid, foreign key to auth.users, nullable for defaults)
   name: string (not null)
-  content: string (not null, markdown)
+  content: string (not null)
+  variables: jsonb (array of TemplateVariable, default: [])
+  is_default: boolean (not null, default: false)
   created_at: string (timestamp)
   updated_at: string (timestamp)
 }
 ```
+
+**Indexes:**
+- idx_contract_templates_user_id (user_id)
+- idx_contract_templates_name (name)
+- idx_contract_templates_is_default (is_default)
+- idx_contract_templates_created_at (created_at DESC)
+
+**RLS Policies:**
+- SELECT: Users can view own templates and all default templates
+- INSERT: Users can create own templates (auth.uid() = user_id)
+- UPDATE: Users can update own templates
+- DELETE: Users can delete own non-default templates
 
 #### contracts
 ```typescript
@@ -295,6 +321,39 @@ To provide a simple, efficient, and localized solution for managing rental prope
 - Unit tests: 94 tests across components, services, and validations
 - Coverage: 100% for critical paths
 - E2E scenarios: Create, read, update, delete operations
+
+## Phase 4 Implementation Status (In Progress - Contract Template Management)
+
+### Completed Tasks
+- [x] Database schema for contract_templates table
+- [x] RLS policies for template access control
+- [x] Default template seeding (3 Vietnamese templates)
+- [x] Type definitions (ContractTemplate, TemplateVariable, etc.)
+- [x] Type mappers (toContractTemplate, toContractTemplateInsert, etc.)
+- [x] Contract template service with full CRUD operations
+- [x] Variable substitution with XSS-safe HTML entity escaping
+- [x] Template variable extraction from content
+- [x] Template cloning functionality
+- [x] API routes for template CRUD
+- [x] UI components for template management
+- [x] Template list page with pagination and search
+- [x] Template detail/view page
+- [x] Template creation form
+- [x] Template edit form
+- [x] Template delete functionality with confirmation
+- [x] Mobile-responsive design
+- [x] i18n support for template UI
+
+### Features
+- **Variable Substitution**: {{variable}} syntax with regex-based replacement
+- **XSS Protection**: HTML entity escaping (& < > " ')
+- **Default Templates**: 3 pre-configured Vietnamese templates
+- **Template Variables**: 14+ standard variables for tenant, landlord, property, and financial data
+- **User Isolation**: RLS policies ensure users can only access their own templates
+- **Search & Filter**: Full-text search on name and content
+- **Pagination**: Configurable page size for template lists
+- **Clone Support**: Duplicate templates without creating base copies
+- **Type Safety**: Complete TypeScript coverage for all operations
 
 ### Configuration Files
 - **package.json** - Dependencies and scripts

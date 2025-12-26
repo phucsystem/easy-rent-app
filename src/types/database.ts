@@ -34,6 +34,8 @@ export interface Database {
           user_id: string;
           name: string;
           content: string;
+          variables: Json;
+          is_default: boolean;
           created_at: string;
           updated_at: string;
         };

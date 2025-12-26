@@ -1,8 +1,8 @@
 # System Architecture
 
 **Last Updated:** 2025-12-26
-**Version:** 0.2.0
-**Status:** Phase 2 In Progress
+**Version:** 0.3.0
+**Status:** Phase 4 In Progress
 
 ## Table of Contents
 - [Architecture Overview](#architecture-overview)
@@ -119,6 +119,22 @@ src/app/
 │   ├── dashboard/               # Dashboard pages
 │   │   ├── page.tsx            # Dashboard (protected)
 │   │   └── dashboard-client.tsx
+│   ├── tenants/                 # Tenant management (Phase 3)
+│   │   ├── page.tsx            # Tenant list
+│   │   ├── create/
+│   │   │   └── page.tsx        # Tenant creation
+│   │   └── [id]/
+│   │       ├── page.tsx        # Tenant detail
+│   │       └── edit/
+│   │           └── page.tsx    # Tenant edit
+│   ├── templates/               # Contract templates (Phase 4)
+│   │   ├── page.tsx            # Template list
+│   │   ├── create/
+│   │   │   └── page.tsx        # Template creation
+│   │   └── [id]/
+│   │       ├── page.tsx        # Template detail
+│   │       └── edit/
+│   │           └── page.tsx    # Template edit
 │   ├── layout.tsx              # Locale layout
 │   └── page.tsx                # Locale redirect
 ├── globals.css                 # Global styles
@@ -263,27 +279,39 @@ export async function createTenant(formData: FormData) {
 ### Schema Design
 
 **Tables**:
-- `tenants` - Tenant information
-- `contract_templates` - Reusable contract templates
-- `contracts` - Generated contracts with snapshots
+- `tenants` - Tenant information (Phase 3)
+- `contract_templates` - Reusable contract templates (Phase 4)
+- `contracts` - Generated contracts with snapshots (Phase 5)
 
 **Relationships**:
 ```
 auth.users (Supabase Auth)
     ↓ 1:N
-tenants ←───────┐
-    ↓            │
-contracts ──────┘
-    ↑ N:1
-contract_templates
+tenants
+    │
+    └─────┐
+          │
+    contracts
+    ↑
+    └─── contract_templates
+        (N:1 relationship)
 ```
+
+**Template Structure**:
+- Templates store variable definitions as JSONB
+- Variables include key, label, type, required status, description
+- Content uses {{variable}} syntax for substitution
+- RLS policies: public access to defaults, private access to user templates
 
 ### Row Level Security (RLS)
 
 **Policies**:
-- **Tenants**: Users can only CRUD their own tenants
-- **Templates**: Users can only CRUD their own templates
-- **Contracts**: Users can only read contracts they created
+- **Tenants**: Users can only CRUD their own tenants (auth.uid() = user_id)
+- **Templates**: Users can view own templates + all default templates; only CRUD own templates
+  - SELECT: `auth.uid() = user_id OR is_default = true OR user_id IS NULL`
+  - INSERT/UPDATE: `auth.uid() = user_id`
+  - DELETE: `auth.uid() = user_id AND is_default = false`
+- **Contracts**: Users can only read contracts they created (future)
 
 **Example Policy**:
 ```sql

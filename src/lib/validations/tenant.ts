@@ -27,10 +27,11 @@ export const tenantFormSchema = z.object({
 
   currentAddress: z
     .string()
-    .min(1, 'validation.addressRequired')
-    .max(500, 'validation.addressMax'),
+    .max(500, 'validation.addressMax')
+    .optional()
+    .or(z.literal('')),
 
-  permanentAddress: z.string().max(500, 'validation.addressMax'),
+  permanentAddress: z.string().max(500, 'validation.addressMax').optional().or(z.literal('')),
 });
 
 export type TenantFormSchema = z.infer<typeof tenantFormSchema>;

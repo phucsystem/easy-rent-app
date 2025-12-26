@@ -25,8 +25,8 @@ export interface TenantFormValues {
   idCard: string;
   phone: string;
   email: string;
-  currentAddress: string;
-  permanentAddress: string;
+  currentAddress?: string;
+  permanentAddress?: string;
 }
 
 export type CreateTenantInput = TenantFormValues;
