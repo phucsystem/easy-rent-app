@@ -1,0 +1,27 @@
+{
+  "common": {
+    "appName": "Easy Rent",
+    "save": "Lưu",
+    "cancel": "Hủy",
+    "delete": "Xóa",
+    "edit": "Sửa",
+    "create": "Tạo mới",
+    "search": "Tìm kiếm",
+    "loading": "Đang tải...",
+    "noData": "Không có dữ liệu",
+    "confirm": "Xác nhận",
+    "back": "Quay lại"
+  },
+  "nav": {
+    "dashboard": "Tổng quan",
+    "tenants": "Khách thuê",
+    "templates": "Mẫu hợp đồng",
+    "contracts": "Hợp đồng"
+  },
+  "auth": {
+    "signIn": "Đăng nhập",
+    "signOut": "Đăng xuất",
+    "email": "Email",
+    "password": "Mật khẩu"
+  }
+}
