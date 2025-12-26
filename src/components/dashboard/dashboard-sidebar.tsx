@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useParams, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import {
   LayoutDashboard,
   Calendar,
@@ -15,12 +16,12 @@ import {
 import { useState } from 'react';
 
 const navItems = [
-  { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },
-  { icon: Calendar, label: 'Bookings', href: '/bookings' },
-  { icon: Building2, label: 'Properties', href: '/properties' },
-  { icon: Users, label: 'Customers', href: '/customers' },
-  { icon: FileText, label: 'Contracts', href: '/contracts' },
-  { icon: Settings, label: 'Settings', href: '/settings' },
+  { icon: LayoutDashboard, labelKey: 'nav.dashboard', href: '/dashboard' },
+  { icon: Calendar, labelKey: 'nav.bookings', href: '/bookings' },
+  { icon: Building2, labelKey: 'nav.properties', href: '/properties' },
+  { icon: Users, labelKey: 'nav.customers', href: '/customers' },
+  { icon: FileText, labelKey: 'nav.contracts', href: '/contracts' },
+  { icon: Settings, labelKey: 'nav.settings', href: '/settings' },
 ];
 
 interface DashboardSidebarProps {
@@ -28,6 +29,7 @@ interface DashboardSidebarProps {
 }
 
 export function DashboardSidebar({ locale }: DashboardSidebarProps) {
+  const t = useTranslations();
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
 
@@ -44,7 +46,7 @@ export function DashboardSidebar({ locale }: DashboardSidebarProps) {
             <span className="text-lg font-bold text-primary-foreground">$</span>
           </div>
           {!collapsed && (
-            <span className="text-white font-semibold text-lg">Easy Rent</span>
+            <span className="text-white font-semibold text-lg">{t('dashboard.sidebar.brand')}</span>
           )}
         </div>
       </div>
@@ -73,7 +75,7 @@ export function DashboardSidebar({ locale }: DashboardSidebarProps) {
                 >
                   <Icon className="w-5 h-5 flex-shrink-0 transition-transform group-hover:scale-110" />
                   {!collapsed && (
-                    <span className="truncate">{item.label}</span>
+                    <span className="truncate">{t(item.labelKey)}</span>
                   )}
                   {isActive && (
                     <div className="ml-auto w-1 h-5 bg-[#F08C00] rounded-full shadow-sm" />
@@ -89,7 +91,7 @@ export function DashboardSidebar({ locale }: DashboardSidebarProps) {
       <button
         onClick={() => setCollapsed(!collapsed)}
         className="absolute -right-3 top-20 w-6 h-6 bg-primary rounded-full flex items-center justify-center shadow-lg hover:bg-[#F08C00] hover:scale-110 transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-        aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+        aria-label={collapsed ? t('dashboard.sidebar.expandSidebar') : t('dashboard.sidebar.collapseSidebar')}
       >
         {collapsed ? (
           <ChevronRight className="w-3 h-3 text-[#212121]" />

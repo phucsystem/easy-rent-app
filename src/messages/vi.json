@@ -14,14 +14,138 @@
   },
   "nav": {
     "dashboard": "Tổng quan",
+    "bookings": "Đặt phòng",
+    "properties": "Bất động sản",
+    "customers": "Khách hàng",
     "tenants": "Khách thuê",
     "templates": "Mẫu hợp đồng",
-    "contracts": "Hợp đồng"
+    "contracts": "Hợp đồng",
+    "settings": "Cài đặt"
   },
   "auth": {
     "signIn": "Đăng nhập",
     "signOut": "Đăng xuất",
     "email": "Email",
-    "password": "Mật khẩu"
+    "password": "Mật khẩu",
+    "login": {
+      "title": "Chào Mừng Trở Lại",
+      "subtitle": "Đăng nhập để truy cập trang quản trị và quản lý cho thuê của bạn một cách dễ dàng.",
+      "cardTitle": "Đăng Nhập",
+      "description": "Nhập thông tin đăng nhập của bạn để tiếp tục",
+      "emailLabel": "Email",
+      "emailPlaceholder": "your@email.com",
+      "passwordLabel": "Mật khẩu",
+      "forgotPassword": "Quên mật khẩu?",
+      "button": "Đăng Nhập",
+      "signingIn": "Đang đăng nhập...",
+      "noAccount": "Chưa có tài khoản?",
+      "signUpLink": "Đăng ký"
+    },
+    "register": {
+      "title": "Tạo Tài Khoản",
+      "subtitle": "Tham gia Easy Rent ngay hôm nay và bắt đầu quản lý cho thuê của bạn một cách dễ dàng.",
+      "cardTitle": "Đăng Ký",
+      "description": "Nhập thông tin chi tiết của bạn để tạo tài khoản",
+      "emailLabel": "Email",
+      "emailPlaceholder": "your@email.com",
+      "passwordLabel": "Mật khẩu",
+      "passwordPlaceholder": "••••••••",
+      "passwordHint": "Phải có ít nhất 6 ký tự",
+      "confirmPasswordLabel": "Xác nhận mật khẩu",
+      "confirmPasswordPlaceholder": "••••••••",
+      "button": "Đăng Ký",
+      "creatingAccount": "Đang tạo tài khoản...",
+      "haveAccount": "Đã có tài khoản?",
+      "signInLink": "Đăng nhập",
+      "success": {
+        "title": "Kiểm Tra Email Của Bạn",
+        "subtitle": "Chúng tôi đã gửi cho bạn một liên kết xác nhận. Nhấp vào đó để kích hoạt tài khoản của bạn.",
+        "cardTitle": "Gần Hoàn Tất!",
+        "cardDescription": "Vui lòng kiểm tra email của bạn để xác minh tài khoản",
+        "button": "Đến Đăng Nhập"
+      }
+    },
+    "forgotPassword": {
+      "title": "Quên Mật Khẩu",
+      "description": "Nhập email của bạn và chúng tôi sẽ gửi cho bạn liên kết đặt lại",
+      "emailLabel": "Email",
+      "emailPlaceholder": "your@email.com",
+      "button": "Gửi Liên Kết Đặt Lại",
+      "sending": "Đang gửi...",
+      "backToSignIn": "Quay lại Đăng Nhập",
+      "success": {
+        "title": "Kiểm tra email của bạn",
+        "descriptionPrefix": "Chúng tôi đã gửi liên kết đặt lại mật khẩu đến"
+      }
+    },
+    "resetPassword": {
+      "title": "Đặt Mật Khẩu Mới",
+      "description": "Nhập mật khẩu mới của bạn bên dưới",
+      "newPasswordLabel": "Mật khẩu mới",
+      "confirmPasswordLabel": "Xác nhận mật khẩu",
+      "placeholder": "••••••••",
+      "button": "Cập Nhật Mật Khẩu",
+      "updating": "Đang cập nhật..."
+    },
+    "validation": {
+      "passwordMismatch": "Mật khẩu không khớp",
+      "passwordMinLength": "Mật khẩu phải có ít nhất 6 ký tự",
+      "registrationFailed": "Đăng ký thất bại",
+      "signInFailed": "Đăng nhập thất bại",
+      "resetEmailFailed": "Không thể gửi email đặt lại",
+      "updatePasswordFailed": "Không thể cập nhật mật khẩu"
+    }
+  },
+  "dashboard": {
+    "heading": "Tổng Quan",
+    "welcomeBack": "Chào mừng trở lại,",
+    "stats": {
+      "locations": "Địa điểm",
+      "customers": "Khách hàng",
+      "activeContract": "Hợp đồng đang hoạt động",
+      "totalRevenue": "Tổng doanh thu",
+      "pendingBookings": "Đặt phòng đang chờ",
+      "completedBookings": "Đặt phòng đã hoàn thành"
+    },
+    "charts": {
+      "invoiceAmountByTime": "Số tiền hóa đơn theo thời gian",
+      "totalInvoicedAmount": "Tổng số tiền đã lập hóa đơn",
+      "monthly": "Hàng tháng",
+      "weekly": "Hàng tuần",
+      "daily": "Hàng ngày",
+      "placeholder": "Biểu đồ sẽ được hiển thị ở đây"
+    },
+    "metrics": {
+      "paidAmount": "Số tiền đã thanh toán",
+      "unpaidAmount": "Số tiền chưa thanh toán",
+      "overdue": "Quá hạn",
+      "total": "Tổng"
+    },
+    "header": {
+      "allLocations": "Tất cả địa điểm",
+      "selectLocation": "Chọn địa điểm",
+      "downtown": "Trung tâm thành phố",
+      "uptown": "Khu phía Bắc",
+      "suburb": "Ngoại ô",
+      "searchPlaceholder": "Tìm kiếm...",
+      "admin": "Quản trị viên",
+      "nameLabel": "Nhãn tên",
+      "myAccount": "Tài khoản của tôi",
+      "profile": "Hồ sơ",
+      "settings": "Cài đặt",
+      "billing": "Thanh toán",
+      "signOut": "Đăng xuất",
+      "signingOut": "Đang đăng xuất..."
+    },
+    "sidebar": {
+      "brand": "Easy Rent",
+      "expandSidebar": "Mở rộng thanh bên",
+      "collapseSidebar": "Thu gọn thanh bên"
+    }
+  },
+  "features": {
+    "easyRentals": "Cho Thuê Dễ Dàng",
+    "secure": "An Toàn",
+    "fast": "Nhanh Chóng"
   }
 }

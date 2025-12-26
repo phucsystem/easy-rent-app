@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,6 +10,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { updatePassword } from '@/lib/supabase/auth';
 
 export default function ResetPasswordPage() {
+  const t = useTranslations();
   const router = useRouter();
   const params = useParams();
   const locale = (params?.locale as string) || 'vi';
@@ -22,12 +24,12 @@ export default function ResetPasswordPage() {
     setError(null);
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match');
+      setError(t('auth.validation.passwordMismatch'));
       return;
     }
 
     if (password.length < 6) {
-      setError('Password must be at least 6 characters');
+      setError(t('auth.validation.passwordMinLength'));
       return;
     }
 
@@ -38,7 +40,7 @@ export default function ResetPasswordPage() {
       router.push(`/${locale}/auth/login`);
     } catch (err: unknown) {
       const authError = err as { message: string };
-      setError(authError.message || 'Failed to update password');
+      setError(authError.message || t('auth.validation.updatePasswordFailed'));
     } finally {
       setLoading(false);
     }
@@ -53,9 +55,9 @@ export default function ResetPasswordPage() {
               <span className="text-2xl font-bold text-primary-foreground">$</span>
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold text-center">Set New Password</CardTitle>
+          <CardTitle className="text-2xl font-bold text-center">{t('auth.resetPassword.title')}</CardTitle>
           <CardDescription className="text-center text-base">
-            Enter your new password below
+            {t('auth.resetPassword.description')}
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
@@ -66,11 +68,11 @@ export default function ResetPasswordPage() {
               </div>
             )}
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-sm font-medium">New Password</Label>
+              <Label htmlFor="password" className="text-sm font-medium">{t('auth.resetPassword.newPasswordLabel')}</Label>
               <Input
                 id="password"
                 type="password"
-                placeholder="••••••••"
+                placeholder={t('auth.resetPassword.placeholder')}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -81,11 +83,11 @@ export default function ResetPasswordPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword" className="text-sm font-medium">Confirm Password</Label>
+              <Label htmlFor="confirmPassword" className="text-sm font-medium">{t('auth.resetPassword.confirmPasswordLabel')}</Label>
               <Input
                 id="confirmPassword"
                 type="password"
-                placeholder="••••••••"
+                placeholder={t('auth.resetPassword.placeholder')}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
@@ -101,7 +103,7 @@ export default function ResetPasswordPage() {
               className="w-full h-11 rounded-xl"
               disabled={loading}
             >
-              {loading ? 'Updating...' : 'Update Password'}
+              {loading ? t('auth.resetPassword.updating') : t('auth.resetPassword.button')}
             </Button>
           </CardFooter>
         </form>

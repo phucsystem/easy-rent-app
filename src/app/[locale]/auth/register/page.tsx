@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,6 +12,7 @@ import Link from 'next/link';
 import { AuthSplitLayout } from '@/components/auth/auth-split-layout';
 
 export default function RegisterPage() {
+  const t = useTranslations();
   const router = useRouter();
   const params = useParams();
   const locale = (params?.locale as string) || 'vi';
@@ -27,12 +29,12 @@ export default function RegisterPage() {
     setError(null);
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match');
+      setError(t('auth.validation.passwordMismatch'));
       return;
     }
 
     if (password.length < 6) {
-      setError('Password must be at least 6 characters');
+      setError(t('auth.validation.passwordMinLength'));
       return;
     }
 
@@ -43,7 +45,7 @@ export default function RegisterPage() {
       setSuccess(true);
     } catch (err: unknown) {
       const authError = err as { message: string };
-      setError(authError.message || 'Registration failed');
+      setError(authError.message || t('auth.validation.registrationFailed'));
     } finally {
       setLoading(false);
     }
@@ -52,8 +54,8 @@ export default function RegisterPage() {
   if (success) {
     return (
       <AuthSplitLayout
-        title="Check Your Email"
-        subtitle="We sent you a confirmation link. Click it to activate your account."
+        title={t('auth.register.success.title')}
+        subtitle={t('auth.register.success.subtitle')}
       >
         <Card className="border-0 shadow-none bg-transparent">
           <CardHeader className="space-y-1 pb-6">
@@ -64,9 +66,9 @@ export default function RegisterPage() {
                 </svg>
               </div>
             </div>
-            <CardTitle className="text-2xl font-bold text-center lg:text-left">Almost There!</CardTitle>
+            <CardTitle className="text-2xl font-bold text-center lg:text-left">{t('auth.register.success.cardTitle')}</CardTitle>
             <CardDescription className="text-base text-center lg:text-left">
-              Please check your email to verify your account
+              {t('auth.register.success.cardDescription')}
             </CardDescription>
           </CardHeader>
           <CardFooter>
@@ -74,7 +76,7 @@ export default function RegisterPage() {
               onClick={() => router.push(`/${locale}/auth/login`)}
               className="w-full h-11 rounded-xl"
             >
-              Go to Sign In
+              {t('auth.register.success.button')}
             </Button>
           </CardFooter>
         </Card>
@@ -84,14 +86,14 @@ export default function RegisterPage() {
 
   return (
     <AuthSplitLayout
-      title="Create Account"
-      subtitle="Join Easy Rent today and start managing your rentals effortlessly."
+      title={t('auth.register.title')}
+      subtitle={t('auth.register.subtitle')}
     >
       <Card className="border-0 shadow-none bg-transparent">
         <CardHeader className="space-y-1 pb-6">
-          <CardTitle className="text-2xl font-bold text-center lg:text-left">Sign Up</CardTitle>
+          <CardTitle className="text-2xl font-bold text-center lg:text-left">{t('auth.register.cardTitle')}</CardTitle>
           <CardDescription className="text-base text-center lg:text-left">
-            Enter your details to create your account
+            {t('auth.register.description')}
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
@@ -102,11 +104,11 @@ export default function RegisterPage() {
               </div>
             )}
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium">Email</Label>
+              <Label htmlFor="email" className="text-sm font-medium">{t('auth.register.emailLabel')}</Label>
               <Input
                 id="email"
                 type="email"
-                placeholder="your@email.com"
+                placeholder={t('auth.register.emailPlaceholder')}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -116,11 +118,11 @@ export default function RegisterPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-sm font-medium">Password</Label>
+              <Label htmlFor="password" className="text-sm font-medium">{t('auth.register.passwordLabel')}</Label>
               <Input
                 id="password"
                 type="password"
-                placeholder="••••••••"
+                placeholder={t('auth.register.passwordPlaceholder')}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -129,14 +131,14 @@ export default function RegisterPage() {
                 autoComplete="new-password"
                 className="rounded-xl h-11 border-gray-200 focus-visible:ring-primary"
               />
-              <p className="text-xs text-muted-foreground">Must be at least 6 characters</p>
+              <p className="text-xs text-muted-foreground">{t('auth.register.passwordHint')}</p>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword" className="text-sm font-medium">Confirm Password</Label>
+              <Label htmlFor="confirmPassword" className="text-sm font-medium">{t('auth.register.confirmPasswordLabel')}</Label>
               <Input
                 id="confirmPassword"
                 type="password"
-                placeholder="••••••••"
+                placeholder={t('auth.register.confirmPasswordPlaceholder')}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
@@ -152,15 +154,15 @@ export default function RegisterPage() {
               className="w-full h-11 rounded-xl"
               disabled={loading}
             >
-              {loading ? 'Creating account...' : 'Sign Up'}
+              {loading ? t('auth.register.creatingAccount') : t('auth.register.button')}
             </Button>
             <p className="text-sm text-muted-foreground">
-              Already have an account?{' '}
+              {t('auth.register.haveAccount')}{' '}
               <Link
                 href={`/${locale}/auth/login`}
                 className="text-primary hover:underline font-semibold"
               >
-                Sign in
+                {t('auth.register.signInLink')}
               </Link>
             </p>
           </CardFooter>

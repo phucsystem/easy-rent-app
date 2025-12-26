@@ -14,14 +14,138 @@
   },
   "nav": {
     "dashboard": "Dashboard",
+    "bookings": "Bookings",
+    "properties": "Properties",
+    "customers": "Customers",
     "tenants": "Tenants",
     "templates": "Templates",
-    "contracts": "Contracts"
+    "contracts": "Contracts",
+    "settings": "Settings"
   },
   "auth": {
     "signIn": "Sign In",
     "signOut": "Sign Out",
     "email": "Email",
-    "password": "Password"
+    "password": "Password",
+    "login": {
+      "title": "Welcome Back",
+      "subtitle": "Sign in to access your dashboard and manage your rentals with ease.",
+      "cardTitle": "Sign In",
+      "description": "Enter your credentials to continue",
+      "emailLabel": "Email",
+      "emailPlaceholder": "your@email.com",
+      "passwordLabel": "Password",
+      "forgotPassword": "Forgot password?",
+      "button": "Sign In",
+      "signingIn": "Signing in...",
+      "noAccount": "Don't have an account?",
+      "signUpLink": "Sign up"
+    },
+    "register": {
+      "title": "Create Account",
+      "subtitle": "Join Easy Rent today and start managing your rentals effortlessly.",
+      "cardTitle": "Sign Up",
+      "description": "Enter your details to create your account",
+      "emailLabel": "Email",
+      "emailPlaceholder": "your@email.com",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "••••••••",
+      "passwordHint": "Must be at least 6 characters",
+      "confirmPasswordLabel": "Confirm Password",
+      "confirmPasswordPlaceholder": "••••••••",
+      "button": "Sign Up",
+      "creatingAccount": "Creating account...",
+      "haveAccount": "Already have an account?",
+      "signInLink": "Sign in",
+      "success": {
+        "title": "Check Your Email",
+        "subtitle": "We sent you a confirmation link. Click it to activate your account.",
+        "cardTitle": "Almost There!",
+        "cardDescription": "Please check your email to verify your account",
+        "button": "Go to Sign In"
+      }
+    },
+    "forgotPassword": {
+      "title": "Forgot Password",
+      "description": "Enter your email and we'll send you a reset link",
+      "emailLabel": "Email",
+      "emailPlaceholder": "your@email.com",
+      "button": "Send Reset Link",
+      "sending": "Sending...",
+      "backToSignIn": "Back to Sign In",
+      "success": {
+        "title": "Check your email",
+        "descriptionPrefix": "We sent a password reset link to"
+      }
+    },
+    "resetPassword": {
+      "title": "Set New Password",
+      "description": "Enter your new password below",
+      "newPasswordLabel": "New Password",
+      "confirmPasswordLabel": "Confirm Password",
+      "placeholder": "••••••••",
+      "button": "Update Password",
+      "updating": "Updating..."
+    },
+    "validation": {
+      "passwordMismatch": "Passwords do not match",
+      "passwordMinLength": "Password must be at least 6 characters",
+      "registrationFailed": "Registration failed",
+      "signInFailed": "Sign in failed",
+      "resetEmailFailed": "Failed to send reset email",
+      "updatePasswordFailed": "Failed to update password"
+    }
+  },
+  "dashboard": {
+    "heading": "Dashboard",
+    "welcomeBack": "Welcome back,",
+    "stats": {
+      "locations": "Locations",
+      "customers": "Customers",
+      "activeContract": "Active Contract",
+      "totalRevenue": "Total Revenue",
+      "pendingBookings": "Pending Bookings",
+      "completedBookings": "Completed Bookings"
+    },
+    "charts": {
+      "invoiceAmountByTime": "Invoice Amount By Time",
+      "totalInvoicedAmount": "Total Invoiced Amount",
+      "monthly": "Monthly",
+      "weekly": "Weekly",
+      "daily": "Daily",
+      "placeholder": "Chart will be rendered here"
+    },
+    "metrics": {
+      "paidAmount": "Paid Amount",
+      "unpaidAmount": "Unpaid Amount",
+      "overdue": "Overdue",
+      "total": "Total"
+    },
+    "header": {
+      "allLocations": "All locations",
+      "selectLocation": "Select Location",
+      "downtown": "Downtown",
+      "uptown": "Uptown",
+      "suburb": "Suburb",
+      "searchPlaceholder": "Search...",
+      "admin": "Admin",
+      "nameLabel": "Name Label",
+      "myAccount": "My Account",
+      "profile": "Profile",
+      "settings": "Settings",
+      "billing": "Billing",
+      "signOut": "Sign out",
+      "signingOut": "Signing out..."
+    },
+    "sidebar": {
+      "brand": "Easy Rent",
+      "expandSidebar": "Expand sidebar",
+      "collapseSidebar": "Collapse sidebar"
+    }
+  },
+  "features": {
+    "easyRentals": "Easy Rentals",
+    "secure": "Secure",
+    "fast": "Fast"
   }
 }

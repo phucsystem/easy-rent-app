@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { Bell, Search, Settings, ChevronDown, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -19,6 +20,7 @@ interface DashboardHeaderProps {
 }
 
 export function DashboardHeader({ locale }: DashboardHeaderProps) {
+  const t = useTranslations();
   const router = useRouter();
   const [isSigningOut, setIsSigningOut] = useState(false);
 
@@ -40,17 +42,17 @@ export function DashboardHeader({ locale }: DashboardHeaderProps) {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="gap-2 rounded-xl">
-              <span>All locations</span>
+              <span>{t('dashboard.header.allLocations')}</span>
               <ChevronDown className="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" className="w-56">
-            <DropdownMenuLabel>Select Location</DropdownMenuLabel>
+            <DropdownMenuLabel>{t('dashboard.header.selectLocation')}</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>All locations</DropdownMenuItem>
-            <DropdownMenuItem>Downtown</DropdownMenuItem>
-            <DropdownMenuItem>Uptown</DropdownMenuItem>
-            <DropdownMenuItem>Suburb</DropdownMenuItem>
+            <DropdownMenuItem>{t('dashboard.header.allLocations')}</DropdownMenuItem>
+            <DropdownMenuItem>{t('dashboard.header.downtown')}</DropdownMenuItem>
+            <DropdownMenuItem>{t('dashboard.header.uptown')}</DropdownMenuItem>
+            <DropdownMenuItem>{t('dashboard.header.suburb')}</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
 
@@ -59,7 +61,7 @@ export function DashboardHeader({ locale }: DashboardHeaderProps) {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
             type="search"
-            placeholder="Search..."
+            placeholder={t('dashboard.header.searchPlaceholder')}
             className="pl-10 pr-4 py-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent w-64"
           />
         </div>
@@ -86,18 +88,18 @@ export function DashboardHeader({ locale }: DashboardHeaderProps) {
                 <span className="text-sm font-semibold text-primary-foreground">A</span>
               </div>
               <div className="text-left hidden sm:block">
-                <p className="text-sm font-medium">Admin</p>
-                <p className="text-xs text-muted-foreground">Name Label</p>
+                <p className="text-sm font-medium">{t('dashboard.header.admin')}</p>
+                <p className="text-xs text-muted-foreground">{t('dashboard.header.nameLabel')}</p>
               </div>
               <ChevronDown className="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuLabel>{t('dashboard.header.myAccount')}</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuItem>Billing</DropdownMenuItem>
+            <DropdownMenuItem>{t('dashboard.header.profile')}</DropdownMenuItem>
+            <DropdownMenuItem>{t('dashboard.header.settings')}</DropdownMenuItem>
+            <DropdownMenuItem>{t('dashboard.header.billing')}</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="text-red-600 cursor-pointer focus:bg-red-50"
@@ -105,7 +107,7 @@ export function DashboardHeader({ locale }: DashboardHeaderProps) {
               disabled={isSigningOut}
             >
               <LogOut className="w-4 h-4 mr-2" />
-              {isSigningOut ? 'Signing out...' : 'Sign out'}
+              {isSigningOut ? t('dashboard.header.signingOut') : t('dashboard.header.signOut')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

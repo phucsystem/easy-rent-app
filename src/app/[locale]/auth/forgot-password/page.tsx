@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,6 +11,7 @@ import { resetPassword } from '@/lib/supabase/auth';
 import Link from 'next/link';
 
 export default function ForgotPasswordPage() {
+  const t = useTranslations();
   const router = useRouter();
   const params = useParams();
   const locale = (params?.locale as string) || 'vi';
@@ -28,7 +30,7 @@ export default function ForgotPasswordPage() {
       setSuccess(true);
     } catch (err: unknown) {
       const authError = err as { message: string };
-      setError(authError.message || 'Failed to send reset email');
+      setError(authError.message || t('auth.validation.resetEmailFailed'));
     } finally {
       setLoading(false);
     }
@@ -46,9 +48,9 @@ export default function ForgotPasswordPage() {
                 </svg>
               </div>
             </div>
-            <CardTitle className="text-2xl font-bold text-center">Check your email</CardTitle>
+            <CardTitle className="text-2xl font-bold text-center">{t('auth.forgotPassword.success.title')}</CardTitle>
             <CardDescription className="text-center text-base">
-              We sent a password reset link to <span className="font-medium text-foreground">{email}</span>
+              {t('auth.forgotPassword.success.descriptionPrefix')} <span className="font-medium text-foreground">{email}</span>
             </CardDescription>
           </CardHeader>
           <CardFooter>
@@ -56,7 +58,7 @@ export default function ForgotPasswordPage() {
               onClick={() => router.push(`/${locale}/auth/login`)}
               className="w-full h-11 rounded-xl"
             >
-              Back to Sign In
+              {t('auth.forgotPassword.backToSignIn')}
             </Button>
           </CardFooter>
         </Card>
@@ -73,9 +75,9 @@ export default function ForgotPasswordPage() {
               <span className="text-2xl font-bold text-primary-foreground">$</span>
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold text-center">Forgot Password</CardTitle>
+          <CardTitle className="text-2xl font-bold text-center">{t('auth.forgotPassword.title')}</CardTitle>
           <CardDescription className="text-center text-base">
-            Enter your email and we&apos;ll send you a reset link
+            {t('auth.forgotPassword.description')}
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
@@ -86,11 +88,11 @@ export default function ForgotPasswordPage() {
               </div>
             )}
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium">Email</Label>
+              <Label htmlFor="email" className="text-sm font-medium">{t('auth.forgotPassword.emailLabel')}</Label>
               <Input
                 id="email"
                 type="email"
-                placeholder="your@email.com"
+                placeholder={t('auth.forgotPassword.emailPlaceholder')}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -106,7 +108,7 @@ export default function ForgotPasswordPage() {
               className="w-full h-11 rounded-xl"
               disabled={loading}
             >
-              {loading ? 'Sending...' : 'Send Reset Link'}
+              {loading ? t('auth.forgotPassword.sending') : t('auth.forgotPassword.button')}
             </Button>
             <Link
               href={`/${locale}/auth/login`}
@@ -115,7 +117,7 @@ export default function ForgotPasswordPage() {
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
-              Back to Sign In
+              {t('auth.forgotPassword.backToSignIn')}
             </Link>
           </CardFooter>
         </form>

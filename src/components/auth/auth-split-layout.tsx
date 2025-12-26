@@ -1,4 +1,7 @@
+'use client';
+
 import { ReactNode } from 'react';
+import { useTranslations } from 'next-intl';
 
 interface AuthSplitLayoutProps {
   children: ReactNode;
@@ -7,6 +10,7 @@ interface AuthSplitLayoutProps {
 }
 
 export function AuthSplitLayout({ children, title, subtitle }: AuthSplitLayoutProps) {
+  const t = useTranslations();
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
       {/* Left Side - Gradient with geometric shapes */}
@@ -53,15 +57,15 @@ export function AuthSplitLayout({ children, title, subtitle }: AuthSplitLayoutPr
           <div className="flex flex-wrap gap-3 justify-center mt-8">
             <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 shadow-sm border border-gray-200">
               <span className="w-2 h-2 rounded-full bg-primary" />
-              Easy Rentals
+              {t('features.easyRentals')}
             </span>
             <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 shadow-sm border border-gray-200">
               <span className="w-2 h-2 rounded-full bg-green-500" />
-              Secure
+              {t('features.secure')}
             </span>
             <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 shadow-sm border border-gray-200">
               <span className="w-2 h-2 rounded-full bg-blue-500" />
-              Fast
+              {t('features.fast')}
             </span>
           </div>
         </div>
