@@ -26,7 +26,7 @@ export function TenantDetailClient({ locale, tenantId }: TenantDetailClientProps
   const deleteMutation = useDeleteTenant();
 
   const handleEdit = () => {
-    router.push(`/${locale}/dashboard/tenant-edit/${tenantId}`);
+    router.push(`/${locale}/tenant-edit/${tenantId}`);
   };
 
   const handleDelete = () => {
@@ -40,7 +40,7 @@ export function TenantDetailClient({ locale, tenantId }: TenantDetailClientProps
         title: t('success.delete'),
         variant: 'default',
       });
-      router.push(`/${locale}/dashboard/tenants`);
+      router.push(`/${locale}/tenants`);
     } catch (error) {
       toast({
         title: t('error.delete'),
@@ -51,7 +51,7 @@ export function TenantDetailClient({ locale, tenantId }: TenantDetailClientProps
   };
 
   const handleBack = () => {
-    router.push(`/${locale}/dashboard/tenants`);
+    router.push(`/${locale}/tenants`);
   };
 
   if (isLoading) {
@@ -188,3 +188,4 @@ export function TenantDetailClient({ locale, tenantId }: TenantDetailClientProps
     </>
   );
 }
+

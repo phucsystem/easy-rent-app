@@ -14,8 +14,8 @@ import { useState } from 'react';
 
 const navItems = [
   { icon: LayoutDashboard, labelKey: 'nav.dashboard', href: '/dashboard' },
-  { icon: Users, labelKey: 'nav.tenants', href: '/dashboard/tenants' },
-  { icon: FileText, labelKey: 'nav.contracts', href: '/dashboard/contracts' },
+  { icon: Users, labelKey: 'nav.tenants', href: '/tenants' },
+  { icon: FileText, labelKey: 'nav.contracts', href: '/contracts' },
 ];
 
 interface DashboardSidebarProps {

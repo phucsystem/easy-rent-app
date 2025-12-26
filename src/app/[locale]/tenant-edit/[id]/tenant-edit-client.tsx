@@ -31,7 +31,7 @@ export function TenantEditClient({ locale, tenantId }: TenantEditClientProps) {
         title: t('success.update'),
         variant: 'default',
       });
-      router.push(`/${locale}/dashboard/tenant/${tenantId}`);
+      router.push(`/${locale}/tenants/${tenantId}`);
     } catch (error) {
       toast({
         title: t('error.update'),
@@ -42,7 +42,7 @@ export function TenantEditClient({ locale, tenantId }: TenantEditClientProps) {
   };
 
   const handleCancel = () => {
-    router.push(`/${locale}/dashboard/tenants/${tenantId}`);
+    router.push(`/${locale}/tenants/${tenantId}`);
   };
 
   if (isLoading) {
@@ -114,3 +114,4 @@ export function TenantEditClient({ locale, tenantId }: TenantEditClientProps) {
     </div>
   );
 }
+

@@ -1,13 +1,13 @@
 import { redirect } from 'next/navigation';
 import { createServerClient } from '@/lib/supabase/server';
-import { TenantDetailClient } from './tenant-detail-client';
+import { TenantPageClient } from './tenant-page-client';
 
-export default async function TenantDetailPage({
+export default async function TenantsPage({
   params,
 }: {
-  params: Promise<{ locale: string; id: string }>;
+  params: Promise<{ locale: string }>;
 }) {
-  const { locale, id } = await params;
+  const { locale } = await params;
   const supabase = await createServerClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -15,5 +15,6 @@ export default async function TenantDetailPage({
     redirect(`/${locale}/auth/login`);
   }
 
-  return <TenantDetailClient locale={locale} tenantId={id} />;
+  return <TenantPageClient locale={locale} />;
 }
+

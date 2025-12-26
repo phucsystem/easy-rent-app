@@ -27,7 +27,7 @@ export function TenantNewClient({ locale }: TenantNewClientProps) {
         title: t('success.create'),
         variant: 'default',
       });
-      router.push(`/${locale}/dashboard/tenants`);
+      router.push(`/${locale}/tenants`);
     } catch (error) {
       toast({
         title: t('error.create'),
@@ -38,7 +38,7 @@ export function TenantNewClient({ locale }: TenantNewClientProps) {
   };
 
   const handleCancel = () => {
-    router.push(`/${locale}/dashboard/tenants`);
+    router.push(`/${locale}/tenants`);
   };
 
   return (
@@ -70,3 +70,4 @@ export function TenantNewClient({ locale }: TenantNewClientProps) {
     </div>
   );
 }
+

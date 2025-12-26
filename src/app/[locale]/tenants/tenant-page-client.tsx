@@ -48,6 +48,18 @@ export function TenantPageClient({ locale }: TenantPageClientProps) {
 
   // Queries and mutations
   const { data, isLoading, error } = useTenants(params);
+  
+  // Debug tenant loading
+  console.log('Tenants Debug:', {
+    isLoading,
+    hasData: !!data,
+    dataLength: data?.data?.length ?? 0,
+    total: data?.total ?? 0,
+    page: data?.page ?? 0,
+    error: error?.message ?? null,
+    params,
+  });
+
   const createMutation = useCreateTenant();
   const updateMutation = useUpdateTenant();
   const deleteMutation = useDeleteTenant();
@@ -62,15 +74,15 @@ export function TenantPageClient({ locale }: TenantPageClientProps) {
   }, []);
 
   const handleCreate = () => {
-    router.push(`/${locale}/dashboard/tenant-new`);
+    router.push(`/${locale}/tenant-new`);
   };
 
   const handleView = (tenant: Tenant) => {
-    router.push(`/${locale}/dashboard/tenant/${tenant.id}`);
+    router.push(`/${locale}/tenants/${tenant.id}`);
   };
 
   const handleEdit = (tenant: Tenant) => {
-    router.push(`/${locale}/dashboard/tenant-edit/${tenant.id}`);
+    router.push(`/${locale}/tenant-edit/${tenant.id}`);
   };
 
   const handleDelete = (tenant: Tenant) => {
@@ -226,3 +238,4 @@ export function TenantPageClient({ locale }: TenantPageClientProps) {
     </>
   );
 }
+
