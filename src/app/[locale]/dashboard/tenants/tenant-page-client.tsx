@@ -144,7 +144,12 @@ export function TenantPageClient({ locale }: TenantPageClientProps) {
           {isLoading ? (
             <TenantSkeleton />
           ) : error ? (
-            <div className="text-destructive">{t('error.load')}</div>
+            <div className="p-8 text-center space-y-2">
+              <div className="text-destructive font-medium">{t('error.load')}</div>
+              <div className="text-sm text-muted-foreground">
+                {error instanceof Error ? error.message : 'Unknown error'}
+              </div>
+            </div>
           ) : data && data.data.length > 0 ? (
             <>
               {/* Desktop Table */}

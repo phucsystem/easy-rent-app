@@ -1,4 +1,3 @@
-import { QueryProvider } from '@/providers/query-provider';
 import { DashboardSidebar } from '@/components/dashboard/dashboard-sidebar';
 import { DashboardHeader } from '@/components/dashboard/dashboard-header';
 
@@ -14,16 +13,14 @@ export default async function DashboardLayout({
   const { locale } = await params;
 
   return (
-    <QueryProvider>
-      <div className="flex min-h-screen bg-[#F8F8F8]">
-        <DashboardSidebar locale={locale} />
-        <div className="flex-1 flex flex-col">
-          <DashboardHeader locale={locale} />
-          <main className="flex-1 p-6 overflow-auto">
-            {children}
-          </main>
-        </div>
+    <div className="flex min-h-screen bg-[#F8F8F8]">
+      <DashboardSidebar locale={locale} />
+      <div className="flex-1 flex flex-col">
+        <DashboardHeader locale={locale} />
+        <main className="flex-1 p-6 overflow-auto">
+          {children}
+        </main>
       </div>
-    </QueryProvider>
+    </div>
   );
 }
