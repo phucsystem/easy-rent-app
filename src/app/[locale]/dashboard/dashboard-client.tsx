@@ -2,23 +2,21 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { DashboardLayout } from '@/components/dashboard/dashboard-layout';
 import { StatCard } from '@/components/dashboard/stat-card';
 import { ChartContainer } from '@/components/dashboard/chart-container';
 import { MetricItem } from '@/components/dashboard/metric-item';
 import { Building2, Users, FileText, Calendar } from 'lucide-react';
 
 interface DashboardClientProps {
-  locale: string;
   userEmail: string;
 }
 
-export function DashboardClient({ locale, userEmail }: DashboardClientProps) {
+export function DashboardClient({ userEmail }: DashboardClientProps) {
   const t = useTranslations();
   const [chartFilter, setChartFilter] = useState(t('dashboard.charts.monthly'));
 
   return (
-    <DashboardLayout locale={locale}>
+    <>
       {/* Page Header */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-foreground">{t('dashboard.heading')}</h1>
@@ -109,6 +107,6 @@ export function DashboardClient({ locale, userEmail }: DashboardClientProps) {
           </ChartContainer>
         </div>
       </div>
-    </DashboardLayout>
+    </>
   );
 }

@@ -147,5 +147,90 @@
     "easyRentals": "Easy Rentals",
     "secure": "Secure",
     "fast": "Fast"
+  },
+  "tenants": {
+    "title": "Tenant Management",
+    "search": {
+      "placeholder": "Search by name, phone, ID card..."
+    },
+    "table": {
+      "fullName": "Full Name",
+      "idCard": "ID Card",
+      "phone": "Phone",
+      "email": "Email",
+      "actions": "Actions"
+    },
+    "form": {
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Enter full name",
+      "idCard": "ID Card Number",
+      "idCardPlaceholder": "Enter citizen ID number",
+      "phone": "Phone Number",
+      "phonePlaceholder": "Example: 0912345678",
+      "email": "Email",
+      "emailPlaceholder": "Enter email address",
+      "currentAddress": "Current Address",
+      "currentAddressPlaceholder": "Enter current address",
+      "permanentAddress": "Permanent Address",
+      "permanentAddressPlaceholder": "Enter permanent address",
+      "create": "Add Tenant",
+      "update": "Update",
+      "cancel": "Cancel",
+      "saving": "Saving...",
+      "createDescription": "Enter new tenant information",
+      "editDescription": "Update tenant information"
+    },
+    "actions": {
+      "create": "Add New",
+      "edit": "Edit",
+      "delete": "Delete",
+      "view": "View Details",
+      "back": "Back to Tenants"
+    },
+    "delete": {
+      "title": "Confirm Delete",
+      "description": "Are you sure you want to delete tenant \"{name}\"? This action cannot be undone.",
+      "cancel": "Cancel",
+      "confirm": "Delete",
+      "deleting": "Deleting..."
+    },
+    "dialog": {
+      "createTitle": "Add New Tenant",
+      "editTitle": "Edit Tenant",
+      "createDescription": "Enter new tenant information",
+      "editDescription": "Update tenant information"
+    },
+    "pagination": {
+      "showing": "Showing {from} - {to} of {total}"
+    },
+    "empty": {
+      "title": "No Tenants Yet",
+      "description": "Get started by adding your first tenant",
+      "action": "Add Tenant"
+    },
+    "error": {
+      "load": "Failed to load tenants",
+      "create": "Failed to create tenant",
+      "update": "Failed to update tenant",
+      "delete": "Failed to delete tenant"
+    },
+    "success": {
+      "create": "Tenant created successfully",
+      "update": "Tenant updated successfully",
+      "delete": "Tenant deleted successfully"
+    }
+  },
+  "contracts": {
+    "title": "Contracts",
+    "comingSoon": "Contract management coming soon"
+  },
+  "validation": {
+    "fullNameMin": "Full name must be at least 2 characters",
+    "fullNameMax": "Full name cannot exceed 100 characters",
+    "idCardInvalid": "ID card must be 12 digits",
+    "phoneInvalid": "Invalid phone number (e.g., 0912345678)",
+    "emailInvalid": "Invalid email address",
+    "addressRequired": "Current address is required",
+    "addressMax": "Address cannot exceed 500 characters"
   }
 }

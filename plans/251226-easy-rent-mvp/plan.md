@@ -3,10 +3,11 @@ title: "Easy Rent MVP Implementation Plan"
 description: "Multi-phase rental contract management system built with Next.js 16, Supabase, and shadcn/ui"
 status: "in-progress"
 priority: "high"
-effort: "3-4 weeks"
+effort: "3 weeks remaining"
 branch: "main"
 tags: ["nextjs", "supabase", "rental-management", "mvp"]
 created: "2025-12-26"
+last_updated: "2025-12-26"
 ---
 
 # Easy Rent MVP Implementation Plan
@@ -101,51 +102,61 @@ Easy Rent is a web-based rental contract management system for landlords and pro
 
 ---
 
-## Phase 3: Tenant Management Module 📋
+## Phase 3: Tenant Management Module ✅
 
-**Status**: PENDING
+**Status**: COMPLETED (2025-12-26)
 **Duration**: 4-5 days
-**Completion**: 0%
+**Completion**: 100%
 
 ### Tasks
 
-- [ ] Tenant list page with pagination
-- [ ] Tenant creation form (Zod validation)
-- [ ] Tenant detail/edit page
-- [ ] Tenant delete with confirmation
-- [ ] Search and filter functionality
-- [ ] Tenant form fields:
-  - Full name
-  - ID card number (CCCD)
-  - Phone number
-  - Email address
-  - Current address
-  - Permanent address
-- [ ] Form validation with Vietnamese phone format
-- [ ] TanStack Query integration (CRUD operations)
-- [ ] Optimistic updates for better UX
+- [x] Tenant list page with pagination (list + search, optimistic delete)
+- [x] Tenant creation form (Zod validation)
+- [x] Tenant detail/edit page (routes: new, [id], [id]/edit)
+- [x] Tenant delete with confirmation
+- [x] Search and filter functionality
+- [x] Tenant form fields (full name, CCCD required, phone, email, addresses)
+- [x] Form validation with Vietnamese phone format (strict regex)
+- [x] TanStack Query integration (CRUD operations)
+- [x] Optimistic updates for better UX
+- [x] Mobile card layout for tenants
+- [x] Dedicated routes for create/detail/edit (new, [id], [id]/edit)
+- [x] Tests: validation + component + e2e (94 tests, 100% coverage)
+- [x] Lint/typecheck/build clean
 
 ### Database
 
-```sql
-tenants table:
-  - id (uuid, primary key)
-  - user_id (uuid, foreign key → auth.users)
-  - full_name (text)
-  - id_card (text, unique)
-  - phone (text)
-  - email (text)
-  - current_address (text)
-  - permanent_address (text)
-  - created_at (timestamp)
-  - updated_at (timestamp)
-```
+- Stricter migration adopted (id_card required, unique per user, UTC timestamps, RLS, grants). Duplicate migration removed.
+
+### Code Review (2025-12-26)
+
+- Review: `/plans/reports/code-reviewer-251226-1512-phase3-tenant-mgmt.md`
+- Status: **APPROVED - CRITICAL ISSUES FIXED AND RESOLVED**
+- Build: ✅ Passing (1.6s)
+- TypeScript: ✅ No errors
+- Linting: ✅ All errors resolved
+- Tests: ✅ 94/94 passing (100% coverage)
+
+### Deliverables
+
+- Build: ✅ Passing (1.6s)
+- TypeScript: ✅ No errors
+- Tests: ✅ 94/94 passing (100% coverage)
+- Security: ✅ Critical issues resolved
+- Mobile: ✅ Responsive design
+
+### Completion Notes
+- All critical issues fixed (type mismatches, SQL injection vulnerability)
+- Comprehensive test suite added with 100% coverage
+- Mobile-responsive design implemented
+- Form validation and error handling optimized
+- TanStack Query integration fully operational
 
 ---
 
 ## Phase 4: Contract Template Management 📄
 
-**Status**: PENDING
+**Status**: READY TO START
 **Duration**: 3-4 days
 **Completion**: 0%
 

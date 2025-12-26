@@ -2,6 +2,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { AuthProvider } from '@/hooks/use-auth';
+import { QueryProvider } from '@/providers/query-provider';
 
 const locales = ['en', 'vi'];
 
@@ -23,9 +24,13 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <NextIntlClientProvider messages={messages}>
-      <AuthProvider>{children}</AuthProvider>
-    </NextIntlClientProvider>
+    <QueryProvider>
+      <NextIntlClientProvider messages={messages}>
+        <AuthProvider>
+          {children}
+        </AuthProvider>
+      </NextIntlClientProvider>
+    </QueryProvider>
   );
 }
 

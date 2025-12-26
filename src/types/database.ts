@@ -6,24 +6,27 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[];
 
+// Define tenant row type separately to avoid circular references
+interface TenantRow {
+  id: string;
+  user_id: string;
+  full_name: string;
+  id_card: string | null;
+  phone: string;
+  email: string | null;
+  current_address: string | null;
+  permanent_address: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Database {
   public: {
     Tables: {
       tenants: {
-        Row: {
-          id: string;
-          user_id: string;
-          full_name: string;
-          phone: string;
-          id_number: string | null;
-          address: string | null;
-          date_of_birth: string | null;
-          note: string | null;
-          created_at: string;
-          updated_at: string;
-        };
-        Insert: Omit<Database['public']['Tables']['tenants']['Row'], 'id' | 'created_at' | 'updated_at'>;
-        Update: Partial<Database['public']['Tables']['tenants']['Insert']>;
+        Row: TenantRow;
+        Insert: Omit<TenantRow, 'id' | 'created_at' | 'updated_at'>;
+        Update: Partial<Omit<TenantRow, 'id' | 'created_at' | 'updated_at'>>;
       };
       contract_templates: {
         Row: {

@@ -147,5 +147,90 @@
     "easyRentals": "Cho Thuê Dễ Dàng",
     "secure": "An Toàn",
     "fast": "Nhanh Chóng"
+  },
+  "tenants": {
+    "title": "Quản lý khách thuê",
+    "search": {
+      "placeholder": "Tìm kiếm theo tên, số điện thoại, CCCD..."
+    },
+    "table": {
+      "fullName": "Họ và tên",
+      "idCard": "Số CCCD",
+      "phone": "Số điện thoại",
+      "email": "Email",
+      "actions": "Thao tác"
+    },
+    "form": {
+      "fullName": "Họ và tên",
+      "fullNamePlaceholder": "Nhập họ và tên",
+      "idCard": "Số CCCD",
+      "idCardPlaceholder": "Nhập số căn cước công dân",
+      "phone": "Số điện thoại",
+      "phonePlaceholder": "Ví dụ: 0912345678",
+      "email": "Email",
+      "emailPlaceholder": "Nhập địa chỉ email",
+      "currentAddress": "Địa chỉ hiện tại",
+      "currentAddressPlaceholder": "Nhập địa chỉ hiện tại",
+      "permanentAddress": "Địa chỉ thường trú",
+      "permanentAddressPlaceholder": "Nhập địa chỉ thường trú",
+      "create": "Thêm khách thuê",
+      "update": "Cập nhật",
+      "cancel": "Hủy",
+      "saving": "Đang lưu...",
+      "createDescription": "Nhập thông tin khách thuê mới",
+      "editDescription": "Cập nhật thông tin khách thuê"
+    },
+    "actions": {
+      "create": "Thêm mới",
+      "edit": "Sửa",
+      "delete": "Xóa",
+      "view": "Xem chi tiết",
+      "back": "Quay lại danh sách"
+    },
+    "delete": {
+      "title": "Xác nhận xóa",
+      "description": "Bạn có chắc chắn muốn xóa khách thuê \"{name}\"? Hành động này không thể hoàn tác.",
+      "cancel": "Hủy",
+      "confirm": "Xóa",
+      "deleting": "Đang xóa..."
+    },
+    "dialog": {
+      "createTitle": "Thêm khách thuê mới",
+      "editTitle": "Chỉnh sửa khách thuê",
+      "createDescription": "Nhập thông tin khách thuê mới",
+      "editDescription": "Cập nhật thông tin khách thuê"
+    },
+    "pagination": {
+      "showing": "Hiển thị {from} - {to} trong tổng số {total}"
+    },
+    "empty": {
+      "title": "Chưa có khách thuê",
+      "description": "Bắt đầu bằng cách thêm khách thuê đầu tiên của bạn",
+      "action": "Thêm khách thuê"
+    },
+    "error": {
+      "load": "Không thể tải danh sách khách thuê",
+      "create": "Không thể thêm khách thuê",
+      "update": "Không thể cập nhật khách thuê",
+      "delete": "Không thể xóa khách thuê"
+    },
+    "success": {
+      "create": "Đã thêm khách thuê thành công",
+      "update": "Đã cập nhật khách thuê thành công",
+      "delete": "Đã xóa khách thuê thành công"
+    }
+  },
+  "contracts": {
+    "title": "Hợp đồng",
+    "comingSoon": "Quản lý hợp đồng sắp ra mắt"
+  },
+  "validation": {
+    "fullNameMin": "Họ tên phải có ít nhất 2 ký tự",
+    "fullNameMax": "Họ tên không được vượt quá 100 ký tự",
+    "idCardInvalid": "Số CCCD phải có 12 chữ số",
+    "phoneInvalid": "Số điện thoại không hợp lệ (VD: 0912345678)",
+    "emailInvalid": "Địa chỉ email không hợp lệ",
+    "addressRequired": "Địa chỉ hiện tại là bắt buộc",
+    "addressMax": "Địa chỉ không được vượt quá 500 ký tự"
   }
 }

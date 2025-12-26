@@ -1,19 +1,19 @@
 import { redirect } from 'next/navigation';
 import { createServerClient } from '@/lib/supabase/server';
-import { DashboardClient } from './dashboard-client';
+import { TenantEditClient } from './tenant-edit-client';
 
-export default async function DashboardPage({
+export default async function TenantEditPage({
   params,
 }: {
-  params: Promise<{ locale: string }>;
+  params: Promise<{ locale: string; id: string }>;
 }) {
-  const { locale } = await params;
+  const { locale, id } = await params;
   const supabase = await createServerClient();
   const { data: { user } } = await supabase.auth.getUser();
 
-  if (!user || !user.email) {
+  if (!user) {
     redirect(`/${locale}/auth/login`);
   }
 
-  return <DashboardClient userEmail={user.email} />;
+  return <TenantEditClient locale={locale} tenantId={id} />;
 }

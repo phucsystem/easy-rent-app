@@ -1,7 +1,7 @@
 # Code Standards & Development Guidelines
 
 **Last Updated:** 2025-12-26
-**Version:** 0.2.0
+**Version:** 0.3.0
 **Status:** Active
 
 ## Table of Contents
@@ -553,8 +553,268 @@ BREAKING CHANGE: Tenant list API now requires query param.
 4. **Address all comments** or explain reasoning
 5. **Request approval** from team member
 
+## Feature Implementation: Tenant Management
+
+### Architecture Pattern
+
+The tenant management feature follows a clean architecture pattern with separation of concerns:
+
+```
+Routes (Server)
+    ↓
+Client Components (Client)
+    ↓
+Custom Hooks (Client/TanStack Query)
+    ↓
+Service Layer (tenantService)
+    ↓
+Supabase Client (RLS enforced)
+    ↓
+PostgreSQL Database
+```
+
+### File Structure
+
+```
+src/
+├── app/[locale]/dashboard/tenants/
+│   ├── page.tsx                          # List page (server)
+│   ├── tenant-page-client.tsx            # List logic (client)
+│   ├── new/
+│   │   ├── page.tsx                      # Create page (server)
+│   │   └── tenant-new-client.tsx         # Create form (client)
+│   ├── [id]/
+│   │   ├── page.tsx                      # Detail page (server)
+│   │   ├── tenant-detail-client.tsx      # Detail view (client)
+│   │   └── edit/
+│   │       ├── page.tsx                  # Edit page (server)
+│   │       └── tenant-edit-client.tsx    # Edit form (client)
+│   └── loading.tsx                       # Loading skeleton
+├── components/tenants/
+│   ├── tenant-card-list.tsx              # Mobile card layout
+│   ├── tenant-table.tsx                  # Desktop table layout
+│   ├── tenant-form.tsx                   # Shared form component
+│   ├── tenant-form-dialog.tsx            # Form dialog wrapper
+│   ├── tenant-search.tsx                 # Search/filter component
+│   ├── tenant-delete-dialog.tsx          # Delete confirmation
+│   ├── tenant-empty-state.tsx            # Empty state display
+│   └── tenant-skeleton.tsx               # Loading skeleton
+├── lib/services/
+│   ├── tenant-service.ts                 # API operations
+│   └── __tests__/
+│       └── tenant-service.test.ts        # Service tests
+├── lib/validations/
+│   └── tenant.ts                         # Zod schemas
+├── hooks/
+│   └── use-tenants.ts                    # Custom React hook
+└── types/
+    └── tenant.ts                         # Type definitions & mappers
+```
+
+### Tenant Service Pattern
+
+```typescript
+// src/lib/services/tenant-service.ts
+export const tenantService = {
+  async list(params: TenantListParams): Promise<TenantListResponse> {
+    // Implemented with pagination, search, sorting
+    // RLS enforced at database level
+    // SQL injection protected via LIKE escaping
+  },
+
+  async getById(id: string): Promise<Tenant> {
+    // Single tenant retrieval
+    // RLS enforced (user_id filtering)
+  },
+
+  async create(input: CreateTenantInput): Promise<Tenant> {
+    // Create new tenant with validation
+    // User ID injected from auth session
+  },
+
+  async update(id: string, input: UpdateTenantInput): Promise<Tenant> {
+    // Update existing tenant
+    // Only provided fields updated
+  },
+
+  async delete(id: string): Promise<void> {
+    // Delete tenant (RLS enforced)
+    // Permanent operation
+  },
+
+  async checkIdCardExists(idCard: string, excludeId?: string): Promise<boolean> {
+    // Validation helper for unique ID card check
+  }
+};
+```
+
+### Validation Pattern
+
+```typescript
+// src/lib/validations/tenant.ts
+export const tenantFormSchema = z.object({
+  fullName: z.string().min(2).max(100),
+  idCard: z.string().regex(/^[0-9]{12}$/),
+  phone: z.string().regex(/^0[35789][0-9]{8}$/),
+  email: z.string().email().or(z.literal('')),
+  currentAddress: z.string().min(1).max(500),
+  permanentAddress: z.string().max(500),
+});
+```
+
+**Validation Rules**:
+- Vietnamese phone: 10 digits starting with 0[35789]
+- Vietnamese ID card: Exactly 12 digits
+- Email: Optional but must be valid if provided
+- Full name: 2-100 characters
+- Addresses: 1-500 characters
+
+### Type Mapping Pattern
+
+```typescript
+// Database row (snake_case) → Domain model (camelCase)
+export function toTenant(row: TenantRow): Tenant {
+  return {
+    id: row.id,
+    userId: row.user_id,
+    fullName: row.full_name,
+    idCard: row.id_card,
+    phone: row.phone,
+    email: row.email,
+    currentAddress: row.current_address,
+    permanentAddress: row.permanent_address,
+    createdAt: new Date(row.created_at),
+    updatedAt: new Date(row.updated_at),
+  };
+}
+```
+
+### React Component Pattern
+
+**Server Component**:
+```typescript
+// src/app/[locale]/dashboard/tenants/new/page.tsx
+export default function NewTenantPage() {
+  return <TenantNewClient />;
+}
+```
+
+**Client Component** (with TanStack Query):
+```typescript
+'use client';
+
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { tenantService } from '@/lib/services/tenant-service';
+import { TenantForm } from '@/components/tenants/tenant-form';
+
+export function TenantNewClient() {
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: tenantService.create,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tenants'] });
+    }
+  });
+
+  return <TenantForm onSubmit={mutate} isLoading={isPending} />;
+}
+```
+
+### Search & Filter Pattern
+
+```typescript
+// Search with SQL injection protection
+const escapedSearch = search.replace(/[%_]/g, '\\$&');
+query = query.or(
+  `full_name.ilike.%${escapedSearch}%,`
+  + `phone.ilike.%${escapedSearch}%,`
+  + `id_card.ilike.%${escapedSearch}%,`
+  + `email.ilike.%${escapedSearch}%`
+);
+```
+
+### Error Handling Pattern
+
+```typescript
+try {
+  const tenant = await tenantService.create(data);
+} catch (error) {
+  if (error instanceof ZodError) {
+    // Validation error - show field-level messages
+    setFieldErrors(error.fieldErrors);
+  } else if (error.code === 'PGRST999') {
+    // RLS policy violation
+    showError('Access denied');
+  } else {
+    // Generic error
+    showError(error.message);
+  }
+}
+```
+
+### Testing Pattern
+
+```typescript
+describe('tenantService.create', () => {
+  it('should create tenant with valid data', async () => {
+    const input: CreateTenantInput = {
+      fullName: 'Nguyen Van A',
+      idCard: '123456789012',
+      phone: '0912345678',
+      email: 'test@example.com',
+      currentAddress: '123 Nguyen Hue',
+      permanentAddress: '456 Le Loi'
+    };
+
+    const result = await tenantService.create(input);
+    expect(result.id).toBeDefined();
+    expect(result.userId).toBeDefined();
+  });
+
+  it('should validate Vietnamese phone format', async () => {
+    await expect(() =>
+      tenantService.create({
+        ...validInput,
+        phone: '1234567890' // Invalid format
+      })
+    ).rejects.toThrow();
+  });
+});
+```
+
+### i18n Pattern
+
+```typescript
+// src/messages/vi.json
+{
+  "validation": {
+    "fullNameMin": "Tên phải ít nhất 2 ký tự",
+    "phoneInvalid": "Số điện thoại phải ở định dạng Việt Nam (0xx xxxxxxx)",
+    "idCardInvalid": "Mã ID phải gồm 12 chữ số"
+  },
+  "tenants": {
+    "create": "Tạo mới",
+    "edit": "Chỉnh sửa",
+    "delete": "Xóa",
+    "search": "Tìm kiếm..."
+  }
+}
+```
+
+### Security Best Practices
+
+1. **RLS Enforcement**: All queries filtered by `user_id`
+2. **Input Validation**: Zod schemas on client and server
+3. **SQL Injection Protection**: LIKE pattern escaping
+4. **Type Safety**: TypeScript strict mode
+5. **CSRF Protection**: Next.js built-in
+6. **XSS Prevention**: React auto-escaping
+7. **Authentication Check**: Server actions validate session
+
 ## Related Documentation
 
+- [Tenant API Documentation](./api-tenant-management.md)
 - [Project Overview & PDR](./project-overview-pdr.md)
 - [System Architecture](./system-architecture.md)
 - [Codebase Summary](./codebase-summary.md)

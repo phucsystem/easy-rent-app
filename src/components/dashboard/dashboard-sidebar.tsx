@@ -5,11 +5,8 @@ import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import {
   LayoutDashboard,
-  Calendar,
-  Building2,
   Users,
   FileText,
-  Settings,
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
@@ -17,11 +14,8 @@ import { useState } from 'react';
 
 const navItems = [
   { icon: LayoutDashboard, labelKey: 'nav.dashboard', href: '/dashboard' },
-  { icon: Calendar, labelKey: 'nav.bookings', href: '/bookings' },
-  { icon: Building2, labelKey: 'nav.properties', href: '/properties' },
-  { icon: Users, labelKey: 'nav.customers', href: '/customers' },
-  { icon: FileText, labelKey: 'nav.contracts', href: '/contracts' },
-  { icon: Settings, labelKey: 'nav.settings', href: '/settings' },
+  { icon: Users, labelKey: 'nav.tenants', href: '/dashboard/tenants' },
+  { icon: FileText, labelKey: 'nav.contracts', href: '/dashboard/contracts' },
 ];
 
 interface DashboardSidebarProps {

@@ -1,8 +1,8 @@
 import { redirect } from 'next/navigation';
 import { createServerClient } from '@/lib/supabase/server';
-import { DashboardClient } from './dashboard-client';
+import { TenantNewClient } from './tenant-new-client';
 
-export default async function DashboardPage({
+export default async function TenantNewPage({
   params,
 }: {
   params: Promise<{ locale: string }>;
@@ -11,9 +11,9 @@ export default async function DashboardPage({
   const supabase = await createServerClient();
   const { data: { user } } = await supabase.auth.getUser();
 
-  if (!user || !user.email) {
+  if (!user) {
     redirect(`/${locale}/auth/login`);
   }
 
-  return <DashboardClient userEmail={user.email} />;
+  return <TenantNewClient locale={locale} />;
 }

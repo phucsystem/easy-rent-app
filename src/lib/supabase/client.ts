@@ -1,5 +1,5 @@
 import { createBrowserClient } from '@supabase/ssr';
-import { Database } from '@/types/database';
+import type { Database } from '@/types/database';
 
 export const createClient = () => {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -14,5 +14,8 @@ export const createClient = () => {
     );
   }
 
-  return createBrowserClient<Database>(supabaseUrl, supabaseAnonKey);
+  // Use any as second generic to work around Supabase type inference issues
+  // See: https://github.com/supabase/supabase-js/issues/849
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return createBrowserClient<Database, any>(supabaseUrl, supabaseAnonKey);
 };
